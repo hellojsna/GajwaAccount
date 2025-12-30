@@ -17,8 +17,15 @@ public func configure(_ app: Application) async throws {
         database: Environment.get("DATABASE_NAME") ?? "vapor_database",
         tls: .prefer(try .init(configuration: .clientDefault)))
     ), as: .psql)
+    
+    app.middleware.use(app.sessions.middleware)
+    app.middleware.use(User.asyncSessionAuthenticator())
+    
+    app.migrations.add(CreateUser())
+    app.migrations.add(CreateUserVerification())
+    app.migrations.add(CreatePasskey())
 
-    app.migrations.add(CreateTodo())
+    try await app.autoMigrate()
 
     app.views.use(.leaf)
 

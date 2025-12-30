@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <title>계정 인증 | Gajwa Account</title>
+</head>
+
+<body>
+    <h1>Gajwa Account</h1>
+    <p>하나의 계정으로 모든 서비스 이용</p>
+    <form id="registerForm">
+        <label for="userLoginID">로그인 ID</label>
+        <input id="userLoginID" type="text">
+        <label for="userName">이름</label>
+        <input id="userName" type="text">
+        <label for="userStudentID">#(academicYear)년 기준 학번</label>
+        <input id="userStudentID" type="number">
+        <label for="userEmail">이메일</label>
+        <input id="userEmail" type="email">
+        <button type="submit">회원 가입</button>
+    </form>
+    <form id="loginForm">
+        <button type="submit">로그인</button>
+    </form>
+    <script type="module">
+
+        const month = new Date().getMonth() + 1;
+        const academicYear = month >= 3 ? new Date().getFullYear() : new Date().getFullYear() - 1;
+
+        const registerForm = document.getElementById("registerForm");
+        registerForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const userLoginID = document.getElementById("userLoginID").value;
+            const userName = document.getElementById("userName").value;
+            const userStudentID = document.getElementById("userStudentID").value;
+
+            const userStudentIDList = `${academicYear}-${userStudentID}`;
+            const userEmail = document.getElementById("userEmail").value;
+
+            const registerResponse = await fetch(`/api/v1/auth/signup?userLoginID=${userLoginID}&userName=${userName}&userStudentIDList=${userStudentIDList}&userEmail=${userEmail}`);
+            const registerResponseJSON = await registerResponse.json();
+
+            const publicKey = PublicKeyCredential.parseCreationOptionsFromJSON(registerResponseJSON.publicKey);
+
+            const credential = await navigator.credentials.create({ publicKey });
+            const passkey = credential.toJSON();
+            const createPasskeyResponse = await fetch('/api/v1/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(passkey)
+            });
+        });
+
+        const loginForm = document.getElementById("loginForm");
+        loginForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            try {
+                const loginResponse = await fetch('/api/v1/auth/signin');
+                const loginResponseJSON = await loginResponse.json();
+
+                const publicKey = PublicKeyCredential.parseRequestOptionsFromJSON(loginResponseJSON.publicKey);
+                const credential = await navigator.credentials.get({ publicKey });
+
+                const loginAttemptResponse = await fetch('/api/v1/auth/signin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(credential.toJSON())
+                });
+
+                if (loginAttemptResponse.ok) {
+                    location.href = "/private";
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+
+</html>
