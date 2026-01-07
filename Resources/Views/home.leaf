@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#(user.userName)님의 Gajwa Account</title>
+    <style>
+        @import url("/styles/root.css");
+        @import url("/styles/home.css");
+    </style>
+</head>
+
+<body>
+    <div id="homeView">
+        <h1>#(user.userName)님, 환영합니다.</h1>
+        <h3>#(user.userLoginID)</h3>
+        #for(userStudentID in userStudentIDMap):
+        <h3>#(userStudentID.year)학년도 #(userStudentID.studentID)</h3>
+        #endfor
+        <p>Gajwa Account</p>
+    </div>
+</body>
+
+</html>

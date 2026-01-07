@@ -21,6 +21,25 @@ func routes(_ app: Application) throws {
         let academicYear: String = month >= 3 ? String(year) : String(year - 1)
         return try await req.view.render("auth", ["academicYear": academicYear])
     }
+    
+    let auth = app.grouped(User.asyncSessionAuthenticator()).grouped(User.redirectMiddleware(path: "/auth"))
+    auth.get("home") { req async throws -> View in
+        let user = try req.auth.require(User.self)
+        struct userStudentIDMap: Content {
+            let year: String
+            let studentID: String
+        }
+        struct PageContext: Content {
+            let user: User
+            let userStudentIDMap: [userStudentIDMap?]
+        }
+        let mappedUserStudentIDList = user.userStudentIDList.map { code -> userStudentIDMap? in
+            let parts = code.split(separator: "-")
+            guard parts.count == 2 else { return nil }
+            return userStudentIDMap(year: String(parts[0]), studentID: String(parts[1]))
+        }
+        return try await req.view.render("home", PageContext(user: user, userStudentIDMap: mappedUserStudentIDList))
+    }
 
     app.get("hello") { req async -> String in
         "Hello, world!"

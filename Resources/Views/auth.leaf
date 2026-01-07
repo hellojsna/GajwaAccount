@@ -1,30 +1,42 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 
 <head>
-    <meta charset="utf-8">
-    <title>계정 인증 | Gajwa Account</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gajwa Account</title>
+    <style>
+        @import url("/styles/root.css");
+        @import url("/styles/auth.css");
+    </style>
 </head>
 
 <body>
-    <h1>Gajwa Account</h1>
-    <p>하나의 계정으로 모든 서비스 이용</p>
-    <form id="registerForm">
-        <label for="userLoginID">로그인 ID</label>
-        <input id="userLoginID" type="text">
-        <label for="userName">이름</label>
-        <input id="userName" type="text">
-        <label for="userStudentID">#(academicYear)년 기준 학번</label>
-        <input id="userStudentID" type="number">
-        <label for="userEmail">이메일</label>
-        <input id="userEmail" type="email">
-        <button type="submit">회원 가입</button>
-    </form>
-    <form id="loginForm">
-        <button type="submit">로그인</button>
-    </form>
+    <div id="mainViewContainer" class="mainViewContainer">
+        <h1>Gajwa Account</h1>
+        <p>하나의 계정으로 모든 서비스 이용</p>
+        <div id="loginView" class="authView active">
+            <form id="loginForm">
+                <button type="submit">패스키로 로그인</button>
+            </form>
+            <a id="showRegisterView" href="#registerView">회원 가입</a>
+        </div>
+        <div id="registerView" class="authView">
+            <form id="registerForm">
+                <label for="userLoginID">로그인 ID</label>
+                <input id="userLoginID" type="text">
+                <label for="userName">이름</label>
+                <input id="userName" type="text">
+                <label for="userStudentID">#(academicYear)학년도 기준 학번</label>
+                <input id="userStudentID" type="number">
+                <label for="userEmail">이메일</label>
+                <input id="userEmail" type="email">
+                <button type="submit">회원 가입</button>
+            </form>
+            <a id="showLoginView" href="#loginView">로그인</a>
+        </div>
+    </div>
     <script type="module">
-
         const month = new Date().getMonth() + 1;
         const academicYear = month >= 3 ? new Date().getFullYear() : new Date().getFullYear() - 1;
 
@@ -48,7 +60,7 @@
                         const userStudentIDList = `${academicYear}-${userStudentID}`;
                         const userEmail = document.getElementById("userEmail").value;
 
-                        const registerResponse = await fetch(`/api/v1/auth/signup?userLoginID=${userLoginID}&userName=${userName}&userStudentIDList=${userStudentIDList}&userEmail=${userEmail}`);
+                        const registerResponse = await fetch(`/api/v1/auth/register?userLoginID=${userLoginID}&userName=${userName}&userStudentIDList=${userStudentIDList}&userEmail=${userEmail}`);
                         const registerResponseJSON = await registerResponse.json();
 
                         const publicKey = PublicKeyCredential.parseCreationOptionsFromJSON(registerResponseJSON.publicKey);
@@ -62,10 +74,10 @@
 
                         const credential = await navigator.credentials.create({ publicKey });
                         const passkey = credential.toJSON();
-                        const createPasskeyResponse = await fetch('/api/v1/auth/signup', {
-                            method: 'POST',
+                        const createPasskeyResponse = await fetch("/api/v1/auth/register", {
+                            method: "POST",
                             headers: {
-                                'Content-Type': 'application/json'
+                                "Content-Type": "application/json"
                             },
                             body: JSON.stringify(passkey)
                         });
@@ -76,20 +88,20 @@
                         event.preventDefault();
 
                         try {
-                            const loginResponse = await fetch('/api/v1/auth/signin');
+                            const loginResponse = await fetch("/api/v1/auth/login");
                             const loginResponseJSON = await loginResponse.json();
 
                             const publicKey = PublicKeyCredential.parseRequestOptionsFromJSON(loginResponseJSON.publicKey);
                             const credential = await navigator.credentials.get({ publicKey });
 
-                            const loginAttemptResponse = await fetch('/api/v1/auth/signin', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
+                            const loginAttemptResponse = await fetch("/api/v1/auth/login", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify(credential.toJSON())
                             });
 
                             if (loginAttemptResponse.ok) {
-                                location.href = "/private";
+                                location.href = "/home";
                             }
                         } catch (error) {
                             console.error(error);
@@ -99,6 +111,7 @@
             });
         }  
     </script>
+    <script src="/scripts/auth.js"></script>
 </body>
 
 </html>

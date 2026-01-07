@@ -1,0 +1,175 @@
+/*
+    color.css
+    GajwaAccount
+
+    Created by Js Na on 2026/01/07.
+    Copyright © 2026 Js Na. All rights reserved.
+*/
+
+:root {
+    --white: #FFFFFF;
+    --red: #FF383C;
+    --orange: #FF8D28;
+    --yellow: #FFCC00;
+    --green: #34C759;
+    --mint: #00C8B3;
+    --teal: #00C3D0;
+    --cyan: #00C0E8;
+    --blue: #0088FF;
+    --indigo: #6155F5;
+    --purple: #CB30E0;
+    --pink: #FF2D55;
+    --brown: #AC7F5E;
+    --gray: #8E8E93;
+    --gray2: #AEAEB2;
+    --gray3: #C7C7CC;
+    --gray4: #D1D1D6;
+    --gray5: #E5E5EA;
+    --gray6: #F2F2F7;
+
+    --primaryBackground: #FFFFFF;
+    --secondaryBackground: #F2F2F7;
+    --teritaryBackground: #FFFFFF;
+    --primaryElevatedBackground: #FFFFFF;
+    --secondaryElevatedBackground: #F2F2F7;
+    --teritaryElevatedBackground: #FFFFFF;
+
+    --primaryGroupedBackground: #F2F2F7;
+    --secondaryGroupedBackground: #FFFFFF;
+    --teritaryGroupedBackground: #F2F2F7;
+    --primaryGroupedElevatedBackground: #F2F2F7;
+    --secondaryGroupedElevatedBackground: #FFFFFF;
+    --teritaryGroupedElevatedBackground: #F2F2F7;
+
+    --primaryText: #000000;
+    --secondaryText: #3C3C433C;
+    --teritaryText: #3C3C431E;
+    --quaternaryText: #3C3C4312;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --red: #FF4245;
+        --orange: #FF9230;
+        --yellow: #FFD600;
+        --green: #30D158;
+        --mint: #00DAC3;
+        --teal: #00D2E0;
+        --cyan: #3CD3FE;
+        --blue: #0091FF;
+        --indigo: #6D7CFF;
+        --purple: #DB34F2;
+        --pink: #FF375F;
+        --brown: #AC8E68;
+        --gray2: #636366;
+        --gray3: #48484A;
+        --gray4: #3A3A3C;
+        --gray5: #2C2C2E;
+        --gray6: #1C1C1E;
+
+        --primaryBackground: #000000;
+        --secondaryBackground: #1C1C1E;
+        --teritaryBackground: #2C2C2E;
+        --primaryElevatedBackground: #1C1C1E;
+        --secondaryElevatedBackground: #2C2C2E;
+        --teritaryElevatedBackground: #3A3A3C;
+
+        --primaryGroupedBackground: #000000;
+        --secondaryGroupedBackground: #1C1C1E;
+        --teritaryGroupedBackground: #2C2C2E;
+        --primaryGroupedElevatedBackground: #1C1C1E;
+        --secondaryGroupedElevatedBackground: #2C2C2E;
+        --teritaryGroupedElevatedBackground: #3A3A3C;
+
+        --primaryText: #FFFFFF;
+        --secondaryText: #EBEBF53C;
+        --teritaryText: #EBEBF51E;
+        --quaternaryText: #EBEBF510;
+    }
+}
+
+@media (prefers-contrast: more) {
+    :root {
+        --red: #E9152D;
+        --orange: #c55300;
+        --yellow: #a15300;
+        --green: #008932;
+        --mint: #008575;
+        --teal: #008198;
+        --cyan: #007EAE;
+        --blue: #1E6EF4;
+        --indigo: #564ADE;
+        --purple: #B02FC2;
+        --pink: #E7124D;
+        --brown: #956D51;
+
+        --gray: #6C6C70;
+        --gray2: #8E8E93;
+        --gray3: #AEAEB2;
+        --gray4: #BCBCC0;
+        --gray5: #D8D8DC;
+        --gray6: #EBEBF0;
+
+        --primaryBackground: #FFFFFF;
+        --secondaryBackground: #F2F2F7;
+        --teritaryBackground: #FFFFFF;
+        --primaryElevatedBackground: #FFFFFF;
+        --secondaryElevatedBackground: #F2F2F7;
+        --teritaryElevatedBackground: #FFFFFF;
+
+        --primaryGroupedBackground: #F2F2F7;
+        --secondaryGroupedBackground: #FFFFFF;
+        --teritaryGroupedBackground: #F2F2F7;
+        --primaryGroupedElevatedBackground: #F2F2F7;
+        --secondaryGroupedElevatedBackground: #FFFFFF;
+        --teritaryGroupedElevatedBackground: #F2F2F7;
+
+        --primaryText: #000000;
+        --secondaryText: #3C3C4350;
+        --teritaryText: #3C3C4346;
+        --quaternaryText: #3C3C4337;
+    }
+}
+
+@media (prefers-color-scheme: dark) and (prefers-contrast: more) {
+    :root {
+        --red: #FF6165;
+        --orange: #FFA056;
+        --yellow: #FEDF43;
+        --green: #4AD968;
+        --mint: #54DFCB;
+        --teal: #3BDDEC;
+        --cyan: #6DD9FF;
+        --blue: #5CB8FF;
+        --indigo: #A7AAFF;
+        --purple: #EA8DFF;
+        --pink: #FF8AC4;
+        --brown: #DBA679;
+
+        --gray: #AEAEB2;
+        --gray2: #7C7C80;
+        --gray3: #545456;
+        --gray4: #444446;
+        --gray5: #363638;
+        --gray6: #242426;
+
+        --primaryBackground: #000000;
+        --secondaryBackground: #1C1C1E;
+        --teritaryBackground: #2C2C2E;
+        --primaryElevatedBackground: #1C1C1E;
+        --secondaryElevatedBackground: #2C2C2E;
+        --teritaryElevatedBackground: #3A3A3C;
+
+        --primaryGroupedBackground: #000000;
+        --secondaryGroupedBackground: #1C1C1E;
+        --teritaryGroupedBackground: #2C2C2E;
+        --primaryGroupedElevatedBackground: #1C1C1E;
+        --secondaryGroupedElevatedBackground: #2C2C2E;
+        --teritaryGroupedElevatedBackground: #3A3A3C;
+
+        --primaryText: #FFFFFF;
+        --secondaryText: #EBEBF546;
+        --teritaryText: #EBEBF537;
+        --quaternaryText: #EBEBF528;
+    }
+}

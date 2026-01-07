@@ -1,0 +1,27 @@
+/*
+    root.css
+    GajwaAccount
+
+    Created by Js Na on 2026/01/07.
+    Copyright © 2026 Js Na. All rights reserved.
+*/
+
+@import url('reset.css');
+@import url('color.css');
+
+body {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--primaryGroupedBackground);
+    color: var(--primaryText);
+    padding: 3rem;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: var(--blue);
+}
