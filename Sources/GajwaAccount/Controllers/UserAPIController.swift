@@ -19,7 +19,7 @@ struct UserAPIController: RouteCollection {
             }
             api.group("v1") { apiv1 in
                 apiv1.group("auth") { auth in
-                    auth.get("signup") { req in
+                    auth.get("register") { req in
                         let userLoginID = try req.query.get(String.self, at: "userLoginID")
                         let userName = try req.query.get(String.self, at: "userName")
                         let userStudentIDList = try req.query.get(String.self, at: "userStudentIDList").components(separatedBy: ":")
@@ -42,7 +42,7 @@ struct UserAPIController: RouteCollection {
                         return CreateCredentialOptions(publicKey: options)
                     }
                     
-                    auth.post("signup") { req in
+                    auth.post("register") { req in
                         let user = try req.auth.require(User.self)
                         
                         guard let challengeEncoded = req.session.data["registrationChallenge"],
@@ -67,7 +67,7 @@ struct UserAPIController: RouteCollection {
                         return HTTPStatus.ok
                     }
                     
-                    auth.get("signin") { req in
+                    auth.get("login") { req in
                         let options = try req.webAuthn.beginAuthentication()
                         
                         req.session.data["authChallenge"] = Data(options.challenge).base64EncodedString()
@@ -75,7 +75,7 @@ struct UserAPIController: RouteCollection {
                         return RequestCredentialOptions(publicKey: options)
                     }
                     
-                    auth.post("signin") { req in
+                    auth.post("login") { req in
                         guard let challengeEncoded = req.session.data["authChallenge"],
                               let challenge = Data(base64Encoded: challengeEncoded) else {
                             throw Abort(.badRequest, reason: "Missing authentication challenge")
