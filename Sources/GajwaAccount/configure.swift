@@ -1,3 +1,11 @@
+//
+//  configure.swift
+//  GajwaAccount
+//
+//  Created by Js Na on 2025/12/25.
+//  Copyright © 2025 Js Na. All rights reserved.
+//
+
 import NIOSSL
 import Fluent
 import FluentPostgresDriver
@@ -7,7 +15,7 @@ import Vapor
 // configures your application
 public func configure(_ app: Application) async throws {
     // uncomment to serve files from /Public folder
-    // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
+    app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
 
     app.databases.use(DatabaseConfigurationFactory.postgres(configuration: .init(
         hostname: Environment.get("DATABASE_HOST") ?? "localhost",
