@@ -44,7 +44,7 @@
     color: var(--primaryText);
     border: none;
     border-radius: 8px;
-    font-size: 1rem;
+    font-size: var(--font-size-text-medium);
     box-sizing: border-box;
 }
 .authView.active {

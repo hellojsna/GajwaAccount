@@ -6,22 +6,151 @@
     Copyright © 2026 Js Na. All rights reserved.
 */
 
-@import url('reset.css');
-@import url('color.css');
+@import url("../fonts/pretendard-gov-subset.css");
+@import url("reset.css");
+@import url("color.css");
+
+:root {
+    --font-size-display-large: 6rem;
+    --font-size-display-medium: 4.4rem;
+    --font-size-display-small: 3.6rem;
+    --font-size-heading-xlarge: 4rem;
+    --font-size-heading-large: 3.2rem;
+    --font-size-heading-medium: 2.4rem;
+    --font-size-heading-small: 1.9rem;
+    --font-size-heading-xsmall: 1.7rem;
+    --font-size-heading-xxsmall: 1.5rem;
+    --font-size-text-large: 1.9rem;
+    --font-size-text-medium: 1.7rem;
+    --font-size-text-small: 1.5rem;
+    --font-size-text-xsmall: 1.3rem;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    font-family: "Pretendard GOV", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--primaryText);
+    font-weight: 400;
+    line-height: 1.5;
+    word-break: keep-all;
+    word-wrap: break-word;
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+}
+
+html {
+    font-size: 62.5%;
+    /* KRDS font size base. (1rem = 10px) */
+}
 
 body {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
     background-color: var(--primaryGroupedBackground);
-    color: var(--primaryText);
+    font-size: var(--font-size-text-medium);
     padding: 3rem;
     box-sizing: border-box;
 }
 
+body * {
+    font-size: var(--font-size-text-medium);
+}
 a {
     text-decoration: none;
     color: var(--blue);
+}
+
+.display {
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.display.large {
+    font-size: var(--font-size-display-large);
+}
+
+.display.medium {
+    font-size: var(--font-size-display-medium);
+}
+
+.display.small {
+    font-size: var(--font-size-display-small);
+}
+
+.heading {
+    font-weight: 700;
+}
+
+.heading.xlarge,
+.heading.large {
+    letter-spacing: 1px;
+}
+
+.heading.xlarge {
+    font-size: var(--font-size-heading-xlarge);
+}
+
+.heading.large {
+    font-size: var(--font-size-heading-large);
+}
+
+.heading.medium {
+    font-size: var(--font-size-heading-medium);
+}
+
+.heading.small {
+    font-size: var(--font-size-heading-small);
+}
+
+.heading.xsmall {
+    font-size: var(--font-size-heading-xsmall);
+}
+
+.heading.xxsmall {
+    font-size: var(--font-size-heading-xxsmall);
+}
+
+p,
+span,
+div {
+    font-size: var(--font-size-text-medium);
+}
+
+.primaryButton {
+    background-color: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-size: var(--font-size-text-medium);
+    font-weight: 700;
+    cursor: pointer;
+    margin: 1rem;
+}
+
+.al {
+  text-align: left !important;
+}
+
+.ac {
+  text-align: center !important;
+}
+
+.ar {
+  text-align: right !important;
+}
+
+@media (max-width: 767px) {
+    :root {
+        --font-size-display-large: 4.4rem;
+        --font-size-display-medium: 3.2rem;
+        --font-size-display-small: 2.8rem;
+        --font-size-heading-xlarge: 2.8rem;
+        --font-size-heading-large: 2.4rem;
+        --font-size-heading-medium: 2.2rem;
+    }
+
+    body {
+        padding: 1.5rem;
+    }
 }

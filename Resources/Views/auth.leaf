@@ -13,11 +13,11 @@
 
 <body>
     <div id="mainViewContainer" class="mainViewContainer">
-        <h1>Gajwa Account</h1>
-        <p>하나의 계정으로 모든 서비스 이용</p>
+        <h1 class="display medium">Gajwa Account</h1>
+        <h6 class="heading xxsmall">하나의 계정으로 모든 서비스 이용</h6>
         <div id="loginView" class="authView active">
             <form id="loginForm">
-                <button type="submit">패스키로 로그인</button>
+                <button type="submit" class="primaryButton">패스키로 로그인</button>
             </form>
             <a id="showRegisterView" href="#registerView">회원 가입</a>
         </div>
@@ -31,7 +31,7 @@
                 <input id="userStudentID" type="number">
                 <label for="userEmail">이메일</label>
                 <input id="userEmail" type="email">
-                <button type="submit">회원 가입</button>
+                <button type="submit" class="primaryButton">회원 가입</button>
             </form>
             <a id="showLoginView" href="#loginView">로그인</a>
         </div>
