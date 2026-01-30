@@ -27,23 +27,25 @@
     --gray5: #E5E5EA;
     --gray6: #F2F2F7;
 
+    --separator: rgba(60, 60, 67, 0.12);
+
     --primaryBackground: #FFFFFF;
     --secondaryBackground: #F2F2F7;
-    --teritaryBackground: #FFFFFF;
+    --tertiaryBackground: #FFFFFF;
     --primaryElevatedBackground: #FFFFFF;
     --secondaryElevatedBackground: #F2F2F7;
-    --teritaryElevatedBackground: #FFFFFF;
+    --tertiaryElevatedBackground: #FFFFFF;
 
     --primaryGroupedBackground: #F2F2F7;
     --secondaryGroupedBackground: #FFFFFF;
-    --teritaryGroupedBackground: #F2F2F7;
+    --tertiaryGroupedBackground: #F2F2F7;
     --primaryGroupedElevatedBackground: #F2F2F7;
     --secondaryGroupedElevatedBackground: #FFFFFF;
-    --teritaryGroupedElevatedBackground: #F2F2F7;
+    --tertiaryGroupedElevatedBackground: #F2F2F7;
 
     --primaryText: #000000;
     --secondaryText: #3C3C433C;
-    --teritaryText: #3C3C431E;
+    --tertiaryText: #3C3C431E;
     --quaternaryText: #3C3C4312;
 }
 
@@ -67,23 +69,25 @@
         --gray5: #2C2C2E;
         --gray6: #1C1C1E;
 
+        --separator: rgba(84, 84, 88, 0.6);
+
         --primaryBackground: #000000;
         --secondaryBackground: #1C1C1E;
-        --teritaryBackground: #2C2C2E;
+        --tertiaryBackground: #2C2C2E;
         --primaryElevatedBackground: #1C1C1E;
         --secondaryElevatedBackground: #2C2C2E;
-        --teritaryElevatedBackground: #3A3A3C;
+        --tertiaryElevatedBackground: #3A3A3C;
 
         --primaryGroupedBackground: #000000;
         --secondaryGroupedBackground: #1C1C1E;
-        --teritaryGroupedBackground: #2C2C2E;
+        --tertiaryGroupedBackground: #2C2C2E;
         --primaryGroupedElevatedBackground: #1C1C1E;
         --secondaryGroupedElevatedBackground: #2C2C2E;
-        --teritaryGroupedElevatedBackground: #3A3A3C;
+        --tertiaryGroupedElevatedBackground: #3A3A3C;
 
         --primaryText: #FFFFFF;
         --secondaryText: #EBEBF53C;
-        --teritaryText: #EBEBF51E;
+        --tertiaryText: #EBEBF51E;
         --quaternaryText: #EBEBF510;
     }
 }
@@ -110,23 +114,25 @@
         --gray5: #D8D8DC;
         --gray6: #EBEBF0;
 
+        --separator: rgba(60, 60, 67, 0.2);
+
         --primaryBackground: #FFFFFF;
         --secondaryBackground: #F2F2F7;
-        --teritaryBackground: #FFFFFF;
+        --tertiaryBackground: #FFFFFF;
         --primaryElevatedBackground: #FFFFFF;
         --secondaryElevatedBackground: #F2F2F7;
-        --teritaryElevatedBackground: #FFFFFF;
+        --tertiaryElevatedBackground: #FFFFFF;
 
         --primaryGroupedBackground: #F2F2F7;
         --secondaryGroupedBackground: #FFFFFF;
-        --teritaryGroupedBackground: #F2F2F7;
+        --tertiaryGroupedBackground: #F2F2F7;
         --primaryGroupedElevatedBackground: #F2F2F7;
         --secondaryGroupedElevatedBackground: #FFFFFF;
-        --teritaryGroupedElevatedBackground: #F2F2F7;
+        --tertiaryGroupedElevatedBackground: #F2F2F7;
 
         --primaryText: #000000;
         --secondaryText: #3C3C4350;
-        --teritaryText: #3C3C4346;
+        --tertiaryText: #3C3C4346;
         --quaternaryText: #3C3C4337;
     }
 }
@@ -153,23 +159,25 @@
         --gray5: #363638;
         --gray6: #242426;
 
+        --separator: rgba(84, 84, 88, 0.65);
+
         --primaryBackground: #000000;
         --secondaryBackground: #1C1C1E;
-        --teritaryBackground: #2C2C2E;
+        --tertiaryBackground: #2C2C2E;
         --primaryElevatedBackground: #1C1C1E;
         --secondaryElevatedBackground: #2C2C2E;
-        --teritaryElevatedBackground: #3A3A3C;
+        --tertiaryElevatedBackground: #3A3A3C;
 
         --primaryGroupedBackground: #000000;
         --secondaryGroupedBackground: #1C1C1E;
-        --teritaryGroupedBackground: #2C2C2E;
+        --tertiaryGroupedBackground: #2C2C2E;
         --primaryGroupedElevatedBackground: #1C1C1E;
         --secondaryGroupedElevatedBackground: #2C2C2E;
-        --teritaryGroupedElevatedBackground: #3A3A3C;
+        --tertiaryGroupedElevatedBackground: #3A3A3C;
 
         --primaryText: #FFFFFF;
         --secondaryText: #EBEBF546;
-        --teritaryText: #EBEBF537;
+        --tertiaryText: #EBEBF537;
         --quaternaryText: #EBEBF528;
     }
 }
