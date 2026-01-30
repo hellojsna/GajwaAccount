@@ -21,11 +21,12 @@ struct UserAPIController: RouteCollection {
                 apiv1.group("auth") { auth in
                     auth.get("register") { req in
                         let userLoginID = try req.query.get(String.self, at: "userLoginID")
+                        let userLoginPassword = try req.query.get(String.self, at: "userLoginPassword") // FIXME: 비밀번호 평문 저장 중. 암호화 필요.
                         let userName = try req.query.get(String.self, at: "userName")
                         let userStudentIDList = try req.query.get(String.self, at: "userStudentIDList").components(separatedBy: ":")
                         let userEmail = try req.query.get(String.self, at: "userEmail")
                         
-                        let user = User(userLoginID: userLoginID, userName: userName, userStudentIDList: userStudentIDList, userEmail: userEmail)
+                        let user = User(userLoginID: userLoginID, userLoginPassword: userLoginPassword, userName: userName, userStudentIDList: userStudentIDList, userEmail: userEmail)
                         
                         try await user.create(on: req.db)
                         req.auth.login(user)

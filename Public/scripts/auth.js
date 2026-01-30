@@ -6,13 +6,365 @@
 //  Copyright © 2026 Js Na. All rights reserved.
 //
 
-document.getElementById("showRegisterView").addEventListener("click", function(e) {
+let currentStep = 1;
+let previousStep = 0;
+const totalSteps = 6;
+
+const loginView = document.getElementById('loginView');
+const passwordLoginView = document.getElementById('passwordLoginView');
+const registerView = document.getElementById('registerView');
+const registerTitle = document.getElementById('registerTitle');
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
+
+const stepContent = [
+    { title: '이름을 입력해 주세요.' },
+    { title: '학번을 입력해 주세요.' },
+    { title: '이메일을 입력해 주세요.' },
+    { title: '로그인에 사용할 ID를 입력해 주세요.' },
+    { title: '비밀번호를 입력해 주세요.' },
+    { title: '이 기기에 패스키를 저장합니다.' }
+];
+
+const validators = {
+    userName: (value) => {
+        const trimmed = value.trim();
+        if (!trimmed) return { valid: false, message: '이름을 입력해주세요.' };
+        return { valid: true, message: '' };
+    },
+    
+    userStudentID: (value) => {
+        const trimmed = value.trim();
+        if (!trimmed) return { valid: false, message: '학번을 입력해주세요.' };
+        if (trimmed.length !== 5) return { valid: false, message: '학번은 5자리 숫자여야 합니다.' };
+        if (!/^\d+$/.test(trimmed)) return { valid: false, message: '숫자만 입력 가능합니다.' };
+        return { valid: true, message: '' };
+    },
+    
+    userEmail: (value) => {
+        const trimmed = value.trim();
+        if (!trimmed) return { valid: false, message: '이메일을 입력해주세요.' };
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(trimmed)) return { valid: false, message: '올바른 이메일 형식이 아닙니다.' };
+        return { valid: true, message: '' };
+    },
+    
+    userLoginID: (value) => {
+        const trimmed = value.trim();
+        if (!trimmed) return { valid: false, message: '로그인 ID를 입력해주세요.' };
+        if (trimmed.length < 4) return { valid: false, message: 'ID는 4자 이상이어야 합니다.' };
+        if (!/^[a-zA-Z0-9]+$/.test(trimmed)) return { valid: false, message: '영문과 숫자만 사용 가능합니다.' };
+        return { valid: true, message: '' };
+    },
+    
+    userLoginPassword: (value) => {
+        if (!value) return { valid: false, message: '비밀번호를 입력해주세요.' };
+        if (value.length < 8) return { valid: false, message: '비밀번호는 8자 이상이어야 합니다.' };
+        return { valid: true, message: '' };
+    },
+    
+    passwordLoginID: (value) => {
+        const trimmed = value.trim();
+        if (!trimmed) return { valid: false, message: '로그인 ID를 입력해주세요.' };
+        return { valid: true, message: '' };
+    },
+    
+    passwordLoginPassword: (value) => {
+        if (!value) return { valid: false, message: '비밀번호를 입력해주세요.' };
+        return { valid: true, message: '' };
+    }
+};
+
+const originalHints = {
+    'userStudentID': '5자리 숫자를 입력하세요.',
+    'userEmail': '암호 복구에 사용됩니다.',
+    'userLoginID': '영문 또는 숫자만 사용할 수 있습니다.',
+    'userLoginPassword': '8자 이상 입력하세요.'
+};
+
+const stepInputMap = {
+    1: ['userName'],
+    2: ['userStudentID'],
+    3: ['userEmail'],
+    4: ['userLoginID'],
+    5: ['userLoginPassword'],
+    6: []
+};
+
+function switchView(view) {
+    loginView.classList.remove('active');
+    passwordLoginView.classList.remove('active');
+    registerView.classList.remove('active');
+    
+    if (view === 'register') {
+        registerView.classList.add('active');
+    } else if (view === 'passwordLogin') {
+        passwordLoginView.classList.add('active');
+    } else {
+        loginView.classList.add('active');
+    }
+}
+
+function updateStep(newStep) {
+    previousStep = currentStep;
+    currentStep = newStep;
+    
+    const steps = document.querySelectorAll('.formStep');
+    const direction = currentStep > previousStep ? 'slideInRight' : 'slideInLeft';
+    
+    steps.forEach(step => {
+        step.classList.remove('active', 'slideInRight', 'slideInLeft');
+    });
+    
+    const activeStep = document.querySelector(`[data-step="${currentStep}"]`);
+    if (activeStep) {
+        activeStep.classList.add('active', direction);
+    }
+    
+    updateProgress();
+    updateHeader();
+    updateStepButton(currentStep);
+}
+
+function updateProgress() {
+    const progress = (currentStep / totalSteps) * 100;
+    progressFill.style.width = `${progress}%`;
+    progressText.textContent = `${currentStep} / ${totalSteps}`;
+}
+
+function updateHeader() {
+    const content = stepContent[currentStep - 1];
+    registerTitle.textContent = content.title;
+}
+
+function resetRegisterForm() {
+    currentStep = 1;
+    previousStep = 0;
+    
+    const inputs = ['userName', 'userStudentID', 'userEmail', 'userLoginID', 'userLoginPassword'];
+    inputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.value = '';
+            input.classList.remove('valid', 'error');
+            const container = input.closest('.studentIdInput');
+            if (container) {
+                container.classList.remove('valid', 'error');
+            }
+        }
+    });
+    
+    // Reset hints to original text
+    document.querySelectorAll('.inputHint').forEach(hint => {
+        hint.classList.remove('valid', 'error');
+    });
+    
+    updateStep(1);
+}
+
+function validateInput(input) {
+    const validator = validators[input.id];
+    if (!validator) return true;
+    
+    const result = validator(input.value);
+    const parent = input.closest('.inputGroup');
+    const hint = parent?.querySelector('.inputHint');
+    const container = input.closest('.studentIdInput');
+    
+    // Update input/container styling
+    if (container) {
+        container.classList.remove('valid', 'error');
+        if (input.value) {
+            container.classList.add(result.valid ? 'valid' : 'error');
+        }
+    } else {
+        input.classList.remove('valid', 'error');
+        if (input.value) {
+            input.classList.add(result.valid ? 'valid' : 'error');
+        }
+    }
+    
+    // Update hint message
+    if (hint) {
+        hint.classList.remove('valid', 'error');
+        if (result.message) {
+            hint.textContent = result.message;
+            hint.classList.add(result.valid ? 'valid' : 'error');
+        } else {
+            // Restore original hint text
+            hint.textContent = originalHints[input.id] || '';
+            hint.classList.remove('valid', 'error');
+        }
+    }
+    
+    return result.valid;
+}
+
+function validateStep(step) {
+    const inputIds = stepInputMap[step];
+    if (!inputIds) return true;
+    
+    return inputIds.every(id => {
+        const input = document.getElementById(id);
+        return input ? validateInput(input) : true;
+    });
+}
+
+function updateStepButton(step) {
+    const activeStep = document.querySelector(`[data-step="${step}"]`);
+    if (!activeStep) return;
+    
+    const nextButton = activeStep.querySelector('.nextStep');
+    const submitButton = activeStep.querySelector('[type="submit"]');
+    const button = nextButton || submitButton;
+    
+    if (button) {
+        const isValid = validateStep(step);
+        button.disabled = !isValid;
+    }
+}
+
+function updatePasswordLoginButton() {
+    const loginIDInput = document.getElementById('passwordLoginID');
+    const passwordInput = document.getElementById('passwordLoginPassword');
+    const submitButton = document.querySelector('#passwordLoginForm [type="submit"]');
+    
+    if (submitButton && loginIDInput && passwordInput) {
+        const idValid = validators.passwordLoginID(loginIDInput.value).valid;
+        const pwValid = validators.passwordLoginPassword(passwordInput.value).valid;
+        submitButton.disabled = !(idValid && pwValid);
+    }
+}
+
+
+document.getElementById('showRegisterView').addEventListener('click', (e) => {
     e.preventDefault();
-    document.getElementById("loginView").classList.remove("active");
-    document.getElementById("registerView").classList.add("active");
+    switchView('register');
+    resetRegisterForm();
 });
-document.getElementById("showLoginView").addEventListener("click", function(e) {
+
+document.getElementById('showLoginView').addEventListener('click', (e) => {
     e.preventDefault();
-    document.getElementById("registerView").classList.remove("active");
-    document.getElementById("loginView").classList.add("active");
+    switchView('login');
 });
+
+document.getElementById('showPasswordLogin').addEventListener('click', (e) => {
+    e.preventDefault();
+    switchView('passwordLogin');
+});
+
+document.getElementById('showPasskeyLogin').addEventListener('click', (e) => {
+    e.preventDefault();
+    switchView('login');
+});
+
+document.querySelectorAll('.nextStep').forEach(button => {
+    button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const step = parseInt(button.closest('.formStep')?.dataset.step);
+        if (step && validateStep(step)) {
+            updateStep(step + 1);
+        }
+    });
+});
+
+document.querySelectorAll('.prevStep').forEach(button => {
+    button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const step = parseInt(button.closest('.formStep')?.dataset.step);
+        if (step && step > 1) {
+            updateStep(step - 1);
+        }
+    });
+});
+
+// Register form inputs
+document.querySelectorAll('.formStep input').forEach(input => {
+    input.addEventListener('input', () => {
+        validateInput(input);
+        const step = parseInt(input.closest('.formStep')?.dataset.step);
+        if (step) updateStepButton(step);
+    });
+    
+    input.addEventListener('blur', () => {
+        validateInput(input);
+        const step = parseInt(input.closest('.formStep')?.dataset.step);
+        if (step) updateStepButton(step);
+    });
+});
+
+// Password login inputs
+['passwordLoginID', 'passwordLoginPassword'].forEach(id => {
+    const input = document.getElementById(id);
+    if (input) {
+        input.addEventListener('input', () => {
+            validateInput(input);
+            updatePasswordLoginButton();
+        });
+        input.addEventListener('blur', () => {
+            validateInput(input);
+            updatePasswordLoginButton();
+        });
+    }
+});
+
+document.querySelectorAll('.formStep input').forEach(input => {
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const step = input.closest('.formStep');
+            const nextButton = step.querySelector('.nextStep');
+            const submitButton = step.querySelector('[type="submit"]');
+            
+            if (nextButton && !nextButton.disabled) {
+                nextButton.click();
+            } else if (submitButton && !submitButton.disabled) {
+                submitButton.click();
+            }
+        }
+    });
+});
+
+const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+        if (mutation.target.classList.contains('active')) {
+            const input = mutation.target.querySelector('input');
+            if (input) {
+                setTimeout(() => input.focus(), 100);
+            }
+        }
+    });
+});
+
+document.querySelectorAll('.formStep').forEach(step => {
+    observer.observe(step, { attributes: true, attributeFilter: ['class'] });
+});
+
+const passwordLoginForm = document.getElementById('passwordLoginForm');
+if (passwordLoginForm) {
+    passwordLoginForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        const userLoginID = document.getElementById('passwordLoginID').value.trim();
+        const userLoginPassword = document.getElementById('passwordLoginPassword').value;
+        
+        if (!userLoginID || !userLoginPassword) {
+            alert('로그인 ID와 비밀번호를 모두 입력해주세요.');
+            return;
+        }
+        
+        try {
+            // Note: 비밀번호 로그인 API가 구현되어 있지 않습니다.
+            // 현재는 패스키 로그인만 서버에서 지원합니다.
+            alert('비밀번호 로그인은 아직 지원되지 않습니다. 패스키 로그인을 사용해주세요.');
+        } catch (error) {
+            console.error('Login error:', error);
+            alert('로그인 중 오류가 발생했습니다.');
+        }
+    });
+}
+
+updateProgress();
+updateHeader();
+updateStepButton(1);
+updatePasswordLoginButton();

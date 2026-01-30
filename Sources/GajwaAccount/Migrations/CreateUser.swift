@@ -13,6 +13,7 @@ struct CreateUser: AsyncMigration {
         try await database.schema("users")
             .id()
             .field("user_login_id", .string, .required) // 로그인 ID
+            .field("user_login_password", .string, .required) // 로그인 비밀번호 해시
             .field("user_name", .string, .required) // 이름
             .field("user_student_id_list", .array(of: .string), .required) // 학번 리스트 (매년 변경하는 것이 아닌 추가) YYYY-학번 형식
             .field("user_email", .string, .required) // 이메일 주소

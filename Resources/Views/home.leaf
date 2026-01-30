@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,11 +13,14 @@
 
 <body>
     <div id="homeView">
-        <h1>#(user.userName)님, 환영합니다.</h1>
-        <h3>#(user.userLoginID)</h3>
+        <h1 class="heading xlarge">#(user.userName)님, 환영합니다.</h1>
+        <h3 class="heading medium">#(user.userLoginID)</h3>
+        <hr>
+        <h3 class="heading medium">학번 정보</h3>
         #for(userStudentID in userStudentIDMap):
-        <h3>#(userStudentID.year)학년도 #(userStudentID.studentID)</h3>
+        <p class="body">#(userStudentID.year)학년도 <span class="body bold">#(userStudentID.studentID)</span></p>
         #endfor
+        <hr>
         <p>Gajwa Account</p>
     </div>
 </body>

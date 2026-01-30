@@ -24,10 +24,14 @@
     --font-size-text-medium: 1.7rem;
     --font-size-text-small: 1.5rem;
     --font-size-text-xsmall: 1.3rem;
+
+    --animation-spring: cubic-bezier(.22,1,.36,1);
 }
 
 html,
 body {
+    margin: 0;
+    padding: 0;
     width: 100%;
     height: 100%;
     font-family: "Pretendard GOV", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -48,21 +52,26 @@ html {
 body {
     background-color: var(--primaryGroupedBackground);
     font-size: var(--font-size-text-medium);
-    padding: 3rem;
     box-sizing: border-box;
 }
 
 body * {
     font-size: var(--font-size-text-medium);
 }
+
 a {
     text-decoration: none;
     color: var(--blue);
 }
 
+.forceLightWeight { /* 접근성 문제가 발생할 수 있음. 디자인 요소가 반드시 필요한 Heading 혹은 Display에서 제한적으로 사용. */
+    font-weight: 200 !important;
+}
+
 .display {
     font-weight: 700;
     letter-spacing: 1px;
+    line-height: 1.2;
 }
 
 .display.large {
@@ -110,9 +119,32 @@ a {
     font-size: var(--font-size-heading-xxsmall);
 }
 
+.body {
+    font-weight: 400;
+    margin: 0.5rem 0;
+}
+
+.body.bold {
+    font-weight: 700;
+}
+
+.body.large {
+    font-size: var(--font-size-text-large);
+}
+.body.medium { /* body 기본값 */
+    font-size: var(--font-size-text-medium);
+}
+.body.small {
+    font-size: var(--font-size-text-small);
+}
+.body.xsmall {
+    font-size: var(--font-size-text-xsmall);
+}
+
 p,
 span,
-div {
+div,
+.body {
     font-size: var(--font-size-text-medium);
 }
 
@@ -129,15 +161,44 @@ div {
 }
 
 .al {
-  text-align: left !important;
+    text-align: left !important;
 }
 
 .ac {
-  text-align: center !important;
+    text-align: center !important;
 }
 
 .ar {
-  text-align: right !important;
+    text-align: right !important;
+}
+
+.segmentedPicker {
+    display: inline-flex;
+    max-width: 100%;
+    border: 1px solid var(--gray4);
+    border-radius: 8px;
+    margin: 1rem 0;
+    box-sizing: border-box;
+    overflow-x: scroll;
+    background-color: var(--gray6);
+}
+.segmentedPicker button {
+    background-color: transparent;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin: 0.3rem;
+    border-radius: 5px;
+    font-size: var(--font-size-text-medium);
+    color: var(--primaryText);
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+.segmentedPicker button.selected {
+    background-color: var(--blue);
+    color: var(--white);
+}
+.segmentedPicker button:not(.selected):hover {
+    background-color: var(--gray4);
 }
 
 @media (max-width: 767px) {
@@ -148,9 +209,5 @@ div {
         --font-size-heading-xlarge: 2.8rem;
         --font-size-heading-large: 2.4rem;
         --font-size-heading-medium: 2.2rem;
-    }
-
-    body {
-        padding: 1.5rem;
     }
 }

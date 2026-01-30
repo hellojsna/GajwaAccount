@@ -17,7 +17,10 @@ final class User: Model, ModelSessionAuthenticatable, @unchecked Sendable {
 
     @Field(key: "user_login_id")
     var userLoginID: String
-
+    
+    @Field(key: "user_login_password")
+    var userLoginPassword: String
+    
     @Field(key: "user_name")
     var userName: String
     
@@ -35,9 +38,10 @@ final class User: Model, ModelSessionAuthenticatable, @unchecked Sendable {
     
     init() { }
 
-    init(id: UUID? = nil, userLoginID: String, userName: String, userStudentIDList: [String], userEmail: String, userPhone: String? = nil, userDiscordToken: String? = nil) {
+    init(id: UUID? = nil, userLoginID: String, userLoginPassword: String, userName: String, userStudentIDList: [String], userEmail: String, userPhone: String? = nil, userDiscordToken: String? = nil) {
         self.id = id
         self.userLoginID = userLoginID
+        self.userLoginPassword = userLoginPassword
         self.userName = userName
         self.userStudentIDList = userStudentIDList
         self.userEmail = userEmail

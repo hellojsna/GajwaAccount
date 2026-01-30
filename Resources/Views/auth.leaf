@@ -12,38 +12,158 @@
 </head>
 
 <body>
-    <div id="mainViewContainer" class="mainViewContainer">
-        <h1 class="display medium">Gajwa Account</h1>
-        <h6 class="heading xxsmall">하나의 계정으로 모든 서비스 이용</h6>
-        <div id="loginView" class="authView active">
-            <form id="loginForm">
-                <button type="submit" class="primaryButton">패스키로 로그인</button>
-            </form>
-            <a id="showRegisterView" href="#registerView">회원 가입</a>
-        </div>
-        <div id="registerView" class="authView">
-            <form id="registerForm">
-                <label for="userLoginID">로그인 ID</label>
-                <input id="userLoginID" type="text">
-                <label for="userName">이름</label>
-                <input id="userName" type="text">
-                <label for="userStudentID">#(academicYear)학년도 기준 학번</label>
-                <input id="userStudentID" type="number">
-                <label for="userEmail">이메일</label>
-                <input id="userEmail" type="email">
-                <button type="submit" class="primaryButton">회원 가입</button>
-            </form>
-            <a id="showLoginView" href="#loginView">로그인</a>
-        </div>
+    <div class="authContainer">
+        <header class="authHeader">
+            <div class="logoContainer">
+                <h1 class="display medium">Gajwa Account</h1>
+                <p class="body large">하나의 계정으로 모든 서비스 이용</p>
+            </div>
+        </header>
+
+        <main class="authMain">
+            <div id="loginView" class="viewWrapper active">
+                <div class="card">
+                    <div class="cardHeader">
+                        <h2 class="heading large">로그인</h2>
+                        <p class="body medium">패스키로 로그인할 수 있습니다.</p>
+                    </div>
+                    <form id="loginForm" class="form">
+                        <button type="submit" class="button buttonPrimary buttonLarge">패스키로 로그인</button>
+                    </form>
+                    <button id="showPasswordLogin" class="button buttonSecondary buttonLarge">비밀번호로 로그인</button>
+                    <div class="cardFooter">
+                        <a id="showRegisterView" href="#register" class="link">회원가입</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="passwordLoginView" class="viewWrapper">
+                <div class="card">
+                    <div class="cardHeader">
+                        <h2 class="heading large">비밀번호로 로그인</h2>
+                        <p class="body medium">계정 정보를 입력해주세요.</p>
+                    </div>
+                    <form id="passwordLoginForm" class="form">
+                        <div class="inputGroup">
+                            <label class="body medium">로그인 ID</label>
+                            <input id="passwordLoginID" type="text" placeholder="gildong" autocomplete="username">
+                        </div>
+                        <div class="inputGroup">
+                            <label class="body medium">비밀번호</label>
+                            <input id="passwordLoginPassword" type="password" placeholder="" autocomplete="current-password">
+                        </div>
+                        <button type="submit" class="button buttonPrimary buttonLarge">로그인</button>
+                    </form>
+                    <div class="cardFooter">
+                        <a id="showPasskeyLogin" href="#login" class="link">패스키로 로그인</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="registerView" class="viewWrapper">
+                <div class="card">
+                    <div class="cardHeader">
+                        <h2 class="heading large" id="registerTitle">회원가입</h2>
+                    </div>
+                    
+                    <div class="progressContainer">
+                        <div class="progressBar">
+                            <div class="progressFill" id="progressFill"></div>
+                        </div>
+                        <p class="body xsmall" id="progressText">1 / 6</p>
+                    </div>
+
+                    <form id="registerForm" class="form">
+                        <div class="formStep active" data-step="1">
+                            <div class="inputGroup">
+                                <label class="body medium">이름</label>
+                                <input id="userName" type="text" placeholder="홍길동" autocomplete="name">
+                            </div>
+                            <button type="button" class="button buttonPrimary buttonLarge nextStep">다음</button>
+                        </div>
+
+                        <div class="formStep" data-step="2">
+                            <div class="inputGroup">
+                                <label class="body medium">학번</label>
+                                <div class="studentIdInput">
+                                    <span class="body medium" id="academicYear"></span>
+                                    <input id="userStudentID" type="number" placeholder="12345" maxlength="5">
+                                </div>
+                                <p class="inputHint body xsmall">5자리 숫자를 입력하세요.</p>
+                            </div>
+                            <div class="buttonGroup">
+                                <button type="button" class="button buttonSecondary prevStep">이전</button>
+                                <button type="button" class="button buttonPrimary nextStep">다음</button>
+                            </div>
+                        </div>
+
+                        <div class="formStep" data-step="3">
+                            <div class="inputGroup">
+                                <label class="body medium">이메일</label>
+                                <input id="userEmail" type="email" placeholder="gildong@example.com" autocomplete="email">
+                                <p class="inputHint body xsmall">암호 복구에 사용됩니다.</p>
+                            </div>
+                            <div class="buttonGroup">
+                                <button type="button" class="button buttonSecondary prevStep">이전</button>
+                                <button type="button" class="button buttonPrimary nextStep">다음</button>
+                            </div>
+                        </div>
+
+                        <div class="formStep" data-step="4">
+                            <div class="inputGroup">
+                                <label class="body medium">로그인 ID</label>
+                                <input id="userLoginID" type="text" placeholder="gildong" autocomplete="username">
+                                <p class="inputHint body xsmall">영문 또는 숫자만 사용할 수 있습니다.</p>
+                            </div>
+                            <div class="buttonGroup">
+                                <button type="button" class="button buttonSecondary prevStep">이전</button>
+                                <button type="button" class="button buttonPrimary nextStep">다음</button>
+                            </div>
+                        </div>
+
+                        <div class="formStep" data-step="5">
+                            <div class="inputGroup">
+                                <label class="body medium">비밀번호</label>
+                                <input id="userLoginPassword" type="password" placeholder="" autocomplete="new-password">
+                                <p class="inputHint body xsmall">8자 이상 입력하세요.</p>
+                            </div>
+                            <div class="buttonGroup">
+                                <button type="button" class="button buttonSecondary prevStep">이전</button>
+                                <button type="button" class="button buttonPrimary nextStep">다음</button>
+                            </div>
+                        </div>
+
+                        <div class="formStep" data-step="6">
+                            <div class="inputGroup">
+                                <p class="body medium">앞으로 이 기기에서는 비밀번호 없이 편리하게 로그인할 수 있습니다.</p>
+                            </div>
+                            <div class="buttonGroup">
+                                <button type="button" class="button buttonSecondary prevStep">이전</button>
+                                <button type="submit" class="button buttonPrimary">회원가입 완료</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="cardFooter">
+                        <p class="body small">이미 계정이 있습니까? <a id="showLoginView" href="#login" class="link">로그인</a></p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="authFooter">
+            <p class="body xsmall">© 2026 GajwaDev. All rights reserved.</p>
+        </footer>
     </div>
+
     <script type="module">
         const month = new Date().getMonth() + 1;
         const academicYear = month >= 3 ? new Date().getFullYear() : new Date().getFullYear() - 1;
+        document.getElementById('academicYear').textContent = academicYear + ' -';
 
         if (window.PublicKeyCredential &&
             PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable &&
             PublicKeyCredential.isConditionalMediationAvailable) {
-            // Check if user verifying platform authenticator is available.  
             Promise.all([
                 PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable(),
                 PublicKeyCredential.isConditionalMediationAvailable(),
@@ -54,13 +174,13 @@
                         event.preventDefault();
 
                         const userLoginID = document.getElementById("userLoginID").value;
+                        const userLoginPassword = document.getElementById("userLoginPassword").value;
                         const userName = document.getElementById("userName").value;
                         const userStudentID = document.getElementById("userStudentID").value;
-
                         const userStudentIDList = `${academicYear}-${userStudentID}`;
                         const userEmail = document.getElementById("userEmail").value;
 
-                        const registerResponse = await fetch(`/api/v1/auth/register?userLoginID=${userLoginID}&userName=${userName}&userStudentIDList=${userStudentIDList}&userEmail=${userEmail}`);
+                        const registerResponse = await fetch(`/api/v1/auth/register?userLoginID=${userLoginID}&userLoginPassword=${userLoginPassword}&userName=${userName}&userStudentIDList=${userStudentIDList}&userEmail=${userEmail}`);
                         const registerResponseJSON = await registerResponse.json();
 
                         const publicKey = PublicKeyCredential.parseCreationOptionsFromJSON(registerResponseJSON.publicKey);
@@ -69,16 +189,12 @@
                             residentKey: "preferred",
                             userVerification: "preferred",
                         };
-                        console.log("publicKey", publicKey);
-
 
                         const credential = await navigator.credentials.create({ publicKey });
                         const passkey = credential.toJSON();
-                        const createPasskeyResponse = await fetch("/api/v1/auth/register", {
+                        await fetch("/api/v1/auth/register", {
                             method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
+                            headers: { "Content-Type": "application/json" },
                             body: JSON.stringify(passkey)
                         });
                     });
@@ -109,7 +225,7 @@
                     });
                 }
             });
-        }  
+        }
     </script>
     <script src="/scripts/auth.js"></script>
 </body>
