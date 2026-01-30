@@ -14,6 +14,9 @@ import Vapor
 
 // configures your application
 public func configure(_ app: Application) async throws {
+    
+    app.http.server.configuration.port = Environment.get("APP_PORT").flatMap(Int.init(_:)) ?? 8080
+
     // uncomment to serve files from /Public folder
     app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
 
