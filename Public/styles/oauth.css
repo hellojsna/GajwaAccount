@@ -1,0 +1,213 @@
+/*
+    oauth.css
+    GajwaAccount
+
+    Created by Js Na on 2026/02/02.
+    Copyright © 2026 Js Na. All rights reserved.
+*/
+
+/* OAuth Consent Screen Layout */
+.consent-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.consent-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.consent-card {
+    width: 100%;
+    max-width: 50rem;
+    padding: 4rem;
+    background: var(--primaryBackground);
+    border-radius: 1.2rem;
+    box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
+}
+
+/* App Header */
+.app-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.app-logo {
+    width: 6rem;
+    height: 6rem;
+    margin: 0 auto 1.5rem;
+}
+
+.app-logo img {
+    width: 100%;
+    height: 100%;
+    border-radius: 1.2rem;
+    object-fit: cover;
+}
+
+.app-name {
+    font-size: var(--font-size-heading-medium);
+    font-weight: 700;
+    color: var(--primaryText);
+    margin-bottom: 0.8rem;
+}
+
+.app-description {
+    font-size: var(--font-size-text-xsmall);
+    color: var(--secondaryText);
+    margin-bottom: 2rem;
+}
+
+/* Consent Message */
+.consent-message {
+    padding: 1.6rem;
+    background: var(--tertiaryGroupedBackground);
+    border-radius: 1rem;
+    margin-bottom: 2.4rem;
+    font-size: var(--font-size-text-xsmall);
+    line-height: 1.6;
+    color: var(--primaryText);
+}
+
+/* User Info Section */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.2rem;
+    background: var(--secondaryGroupedBackground);
+    border-radius: 1rem;
+}
+
+.user-info .label {
+    font-size: var(--font-size-text-xsmall);
+    color: var(--secondaryText);
+    font-weight: 600;
+}
+
+.user-info .value {
+    font-size: var(--font-size-text-xsmall);
+    color: var(--primaryText);
+    font-weight: 700;
+}
+
+/* Scope Section */
+.scope-section {
+    margin-bottom: 2.4rem;
+}
+
+.scope-title {
+    font-size: var(--font-size-text-xsmall);
+    font-weight: 700;
+    color: var(--primaryText);
+    margin-bottom: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.scope-map {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.scope-item-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    padding: 1rem;
+    background: var(--secondaryGroupedBackground);
+    border: 1px solid var(--quaternaryGroupedBackground);
+    border-radius: 1rem;
+}
+
+.scope-checkbox {
+    width: 2rem;
+    height: 2rem;
+    margin-top: 0.2rem;
+    cursor: pointer;
+    accent-color: var(--blue);
+}
+
+.scope-item-content {
+    flex: 1;
+}
+
+.scope-item-title {
+    font-size: var(--font-size-text-xsmall);
+    font-weight: 700;
+    color: var(--primaryText);
+}
+
+.scope-item-desc {
+    font-size: var(--font-size-text-xsmall);
+    color: var(--secondaryText);
+    margin-top: 0.2rem;
+    line-height: 1.5;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 1.2rem;
+    margin-top: 3rem;
+}
+
+.action-buttons form {
+    flex: 1;
+}
+
+.action-buttons button {
+    width: 100%;
+}
+
+/* Consent Footer */
+.consent-footer {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--quaternaryGroupedBackground);
+    text-align: center;
+}
+
+.consent-footer p {
+    font-size: 1.2rem;
+    color: var(--tertiaryText);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.consent-footer a {
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.consent-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+    .consent-card {
+        padding: 2rem;
+    }
+
+    .app-header {
+        margin-bottom: 2rem;
+    }
+
+    .app-logo {
+        width: 5rem;
+        height: 5rem;
+        margin-bottom: 1rem;
+    }
+
+    .app-name {
+        font-size: var(--font-size-heading-small);
+    }
+}

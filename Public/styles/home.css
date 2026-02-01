@@ -1,0 +1,535 @@
+/*
+    home.css
+    GajwaAccount
+
+    Created by Js Na on 2026/01/31.
+    Copyright © 2026 Js Na. All rights reserved.
+*/
+
+body {
+    min-height: 100vh;
+}
+
+#homeView {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Header */
+.homeHeader {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--indigo) 100%);
+    color: var(--white);
+    padding: 4rem 2rem 6rem;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.8s var(--animation-spring);
+}
+
+.homeHeader::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.homeHeaderContent {
+    max-width: 120rem;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.homeHeaderTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.homeHeaderTop h1 {
+    letter-spacing: -0.03em;
+}
+
+.logoutForm {
+    margin: 0;
+}
+
+.logoutButton {
+    background-color: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    color: var(--white);
+    border: 0.1rem solid rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 0.8rem;
+    cursor: pointer;
+}
+
+.logoutButton:active {
+    opacity: 0.8;
+}
+
+.homeWelcome {
+    animation: slideUp 0.8s var(--animation-spring);
+}
+
+.homeWelcome h1 {
+    margin-bottom: 0.8rem;
+    letter-spacing: -0.03em;
+}
+
+.homeWelcome .subtitle {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* Main Content */
+.homeMain {
+    flex: 1;
+    max-width: 120rem;
+    margin: -4rem auto 0;
+    padding: 0 2rem 4rem;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+}
+
+.cardsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(32rem, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    background-color: var(--secondaryGroupedBackground);
+    border-radius: 2rem;
+    padding: 2.5rem;
+    box-shadow:
+        0 0.4rem 2rem rgba(0, 0, 0, 0.06),
+        0 0 0 0.1rem rgba(0, 0, 0, 0.02);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.6s var(--animation-spring);
+    animation-fill-mode: backwards;
+}
+
+.card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+/* Card Header & Content */
+.cardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.cardTitle {
+    flex: 1;
+    min-width: 0;
+}
+
+.editButton {
+    background-color: var(--blue);
+    color: var(--white);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.8rem;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.editButton:active {
+    opacity: 0.8;
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+
+/* Info Rows & List Items */
+.infoRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 1.6rem;
+    background-color: var(--tertiaryGroupedBackground);
+    border-radius: 1rem;
+}
+
+.infoLabel {
+    color: var(--gray);
+}
+
+.infoValue {
+    color: var(--primaryText);
+}
+
+.studentIdList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.studentIdList > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 1.6rem;
+    background-color: var(--tertiaryGroupedBackground);
+    border-radius: 1rem;
+}
+
+
+.emptyState {
+    text-align: center;
+    color: var(--gray2);
+    padding: 2rem 0;
+}
+
+/* Form & Button Styles (for Modals) */
+/* root.css에서 .form, .inputGroup, .inputHint, .studentIdInput, button 스타일 상속 */
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modalBackdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.modalContent {
+    position: relative;
+    background-color: var(--secondaryGroupedBackground);
+    border-radius: 2rem;
+    max-width: 60rem;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 2rem 6rem rgba(0, 0, 0, 0.2);
+}
+
+.modalContentMedium {
+    max-width: 60rem;
+}
+
+.modalContentWide {
+    max-width: 70rem;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    border-bottom: 0.1rem solid var(--separator);
+}
+
+.modalHeader h2 {
+    margin: 0;
+}
+
+.modalClose {
+    background: none;
+    border: none;
+    color: var(--gray);
+    cursor: pointer;
+    width: 3.6rem;
+    height: 3.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalBody {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    flex-direction: column;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.modalBody > * {
+    width: 100%;
+}
+
+.modalSectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+/* OAuth Apps List */
+.oauthAppsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.oauthAppCard {
+    padding: 1rem;
+    border: 0.1rem solid var(--separator);
+    border-radius: 0.6rem;
+    background-color: var(--tertiaryGroupedBackground);
+}
+
+.oauthAppRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.oauthAppInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.oauthAppTitle {
+    margin: 0 0 0.5rem 0;
+}
+
+.oauthAppDesc {
+    margin: 0.25rem 0;
+    font-size: 1.3rem;
+    color: var(--gray);
+}
+
+.oauthAppMeta {
+    margin-top: 0.75rem;
+    padding: 0.5rem 0;
+    border-top: 0.1rem solid var(--separator);
+}
+
+.oauthAppClientRow {
+    margin: 0.25rem 0;
+    font-size: 1.2rem;
+    color: var(--gray2);
+}
+
+.oauthAppClientCode {
+    background: var(--secondaryGroupedBackground);
+    padding: 0.2rem 0.6rem;
+    border-radius: 0.3rem;
+    font-size: 1.2rem;
+}
+
+.oauthAppActions {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+}
+
+.oauthAppActionButton {
+    white-space: nowrap;
+    padding: 0.5rem 1rem;
+    font-size: 1.3rem;
+}
+
+.oauthAppActionButton.isDanger {
+    color: #d32f2f;
+}
+
+.addUriButton {
+    margin-top: 0.5rem;
+}
+
+.addUriGroup {
+    margin-top: 0.5rem;
+}
+
+.oauthUriRow {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.oauthUriInput {
+    flex: 1;
+}
+
+.oauthUriRemoveButton {
+    padding: 0.5rem 1rem;
+}
+
+/* OAuth App Details */
+.appDetailsSection {
+    margin-bottom: 1.5rem;
+}
+
+.appDetailsLabel {
+    margin: 1rem 0 0.5rem 0;
+    text-transform: uppercase;
+    color: var(--gray);
+}
+
+.appDetailsText {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.appDetailsValueRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.appDetailsCode {
+    background: var(--secondaryGroupedBackground);
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+    font-size: 1.2rem;
+    flex: 1;
+    word-break: break-all;
+}
+
+.appDetailsButton {
+    padding: 0.5rem 1rem;
+    font-size: 1.2rem;
+}
+
+.appDetailsWarning {
+    margin: 0.5rem 0 0 0;
+    font-size: 1.2rem;
+    color: #d32f2f;
+}
+
+.appDetailsRedirectItem {
+    margin: 0.5rem 0;
+    font-size: 1.3rem;
+    word-break: break-all;
+    background: var(--tertiaryGroupedBackground);
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+}
+
+.appDetailsScopes {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.appDetailsScopeBadge {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1.2rem;
+    font-size: 1.2rem;
+}
+
+.appDetailsActions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 0.1rem solid var(--separator);
+}
+
+.appDetailsActionButton {
+    flex: 1;
+}
+
+/* Passkey List in Modal */
+.passkeyList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.passkeyItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 1.6rem;
+    background-color: var(--tertiaryGroupedBackground);
+    border-radius: 1rem;
+}
+
+.passkeyMeta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.passkeyActions {
+    display: flex;
+    gap: 0.8rem;
+}
+
+/* Security Section Styles */
+.passkeyHint {
+    color: var(--gray);
+    margin-bottom: 1.5rem;
+}
+
+.passkeyEmpty {
+    margin-top: 2rem;
+    display: none;
+}
+
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

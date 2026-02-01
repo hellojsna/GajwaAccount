@@ -1,0 +1,19 @@
+/*
+    footer.css
+    GajwaAccount
+
+    Created by Js Na on 2026/01/31.
+    Copyright © 2026 Js Na. All rights reserved.
+*/
+.authFooter {
+    width: 100%;
+    padding: 2rem 1rem;
+    text-align: center;
+    margin-top: auto;
+    box-sizing: border-box;
+}
+
+.authFooter p {
+    color: var(--text-tertiary);
+    opacity: 0.6;
+}

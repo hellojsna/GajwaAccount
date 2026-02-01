@@ -7,21 +7,409 @@
     <title>#(user.userName)님의 Gajwa Account</title>
     <style>
         @import url("/styles/root.css");
+        @import url("/styles/footer.css");
         @import url("/styles/home.css");
     </style>
 </head>
 
 <body>
     <div id="homeView">
-        <h1 class="heading xlarge">#(user.userName)님, 환영합니다.</h1>
-        <h3 class="heading medium">#(user.userLoginID)</h3>
-        <hr>
-        <h3 class="heading medium">학번 정보</h3>
-        #for(userStudentID in userStudentIDMap):
-        <p class="body">#(userStudentID.year)학년도 <span class="body bold">#(userStudentID.studentID)</span></p>
-        #endfor
-        <hr>
-        <p>Gajwa Account</p>
+        <!-- Header Section -->
+        <header class="homeHeader">
+            <div class="homeHeaderContent">
+                <div class="homeHeaderTop">
+                    <h1 class="heading small">Gajwa Account</h1>
+                    <form action="/api/v1/auth/logout" method="POST" class="logoutForm">
+                        <button type="submit" class="logoutButton">로그아웃</button>
+                    </form>
+                </div>
+                <div class="homeWelcome">
+                    <h1 class="display medium">#(user.userName)님,<br>환영합니다.</h1>
+                    <p class="subtitle heading small">@#(user.userLoginID)</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="homeMain">
+            <div class="cardsGrid">
+                <!-- Profile Card -->
+                <div class="card">
+                    <div class="cardHeader">
+                        <div class="cardTitle">
+                            <h3 class="heading medium">개인 정보</h3>
+                        </div>
+                        <button class="editButton" data-modal="profileModal">관리</button>
+                    </div>
+                    <div class="cardContent">
+                        <div class="infoRow">
+                            <span class="infoLabel body medium bold">이름</span>
+                            <span class="infoValue body medium bold">#(user.userName)</span>
+                        </div>
+                        <div class="infoRow">
+                            <span class="infoLabel body medium bold">로그인 ID</span>
+                            <span class="infoValue body medium bold">#(user.userLoginID)</span>
+                        </div>
+                        #if(user.userEmail):
+                        <div class="infoRow">
+                            <span class="infoLabel body medium bold">이메일</span>
+                            <span class="infoValue body medium bold">#(user.userEmail)</span>
+                        </div>
+                        #endif
+                    </div>
+                </div>
+
+                <!-- Student ID Card -->
+                <div class="card">
+                    <div class="cardHeader">
+                        <div class="cardTitle">
+                            <h3 class="heading medium">학번</h3>
+                        </div>
+                        <button class="editButton" data-modal="studentIdModal">관리</button>
+                    </div>
+                    <div class="cardContent">
+                        #if(count(userStudentIDMap) > 0):
+                        <div class="studentIdList">
+                            #for(userStudentID in userStudentIDMap):
+                            <h4 class="heading small forceLightWeight">#(userStudentID.year)학년도 <span class="heading small">#(userStudentID.studentID)</span></h4>
+                            #endfor
+                        </div>
+                        #else:
+                        <div class="emptyState">
+                            <p class="body medium">등록된 학번이 없습니다.</p>
+                        </div>
+                        #endif
+                    </div>
+                </div>
+
+                <!-- Security Card -->
+                <div class="card">
+                    <div class="cardHeader">
+                        <div class="cardTitle">
+                            <h3 class="heading medium">보안</h3>
+                        </div>
+                        <button class="editButton" data-modal="securityModal">관리</button>
+                    </div>
+                    <div class="cardContent">
+                        <div class="infoRow">
+                            <span class="infoLabel body medium bold">패스키</span>
+                            <span class="infoValue body medium bold">사용 가능</span>
+                        </div>
+                        <div class="infoRow">
+                            <span class="infoLabel body medium bold">비밀번호</span>
+                            <span class="infoValue body medium bold">설정됨</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OAuth Apps / Developer Verification Card -->
+                <div class="card">
+                    <div class="cardHeader">
+                        <div class="cardTitle">
+                            <h3 class="heading medium">OAuth 앱</h3>
+                        </div>
+                        #if(isDevVerified):
+                        <button class="editButton" data-modal="oauthModal">관리</button>
+                        #endif
+                    </div>
+                    <div class="cardContent">
+                        <div class="infoRow">
+                            <span class="infoLabel body medium bold">개발자 인증</span>
+                            <span class="infoValue body medium bold">#(devVerifyStatus)</span>
+                        </div>
+                        #if(isDevVerified):
+                        <div class="infoRow">
+                            <span class="infoLabel body medium bold">등록된 앱</span>
+                            <span class="infoValue body medium bold" id="oauthAppCount">0</span>
+                        </div>
+                        #endif
+                        <div style="margin-top: 12px;">
+                            #if(!isDevVerified):
+                            <button class="primaryButton buttonLarge" id="verifyDevButton">개발자 인증</button>
+                            #endif
+                            <p class="body xsmall" style="margin-top: 8px; color: var(--gray);">#(devVerifyInfo)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+    <!-- Modals -->
+    <!-- Profile Edit Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modalBackdrop"></div>
+        <div class="modalContent">
+            <div class="modalHeader">
+                <h2 class="heading medium">프로필 편집</h2>
+                <button class="modalClose heading large">&times;</button>
+            </div>
+            <div class="modalBody">
+                <div class="modalSection">
+                    <form id="profileEditForm" class="form">
+                        <div class="inputGroup">
+                            <label class="heading xsmall">이름</label>
+                            <input type="text" id="editUserName" value="#(user.userName)" placeholder="이름">
+                        </div>
+                        <div class="inputGroup">
+                            <label class="heading xsmall">이메일</label>
+                            <input type="email" id="editUserEmail" value="#(user.userEmail)" placeholder="이메일">
+                        </div>
+                        <div class="buttonGroup">
+                            <button type="button" class="secondaryButton">취소</button>
+                            <button type="submit" class="primaryButton">저장</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student ID Modal -->
+    <div id="studentIdModal" class="modal">
+        <div class="modalBackdrop"></div>
+        <div class="modalContent">
+            <div class="modalHeader">
+                <h2 class="heading medium">학번 관리</h2>
+                <button class="modalClose heading large">&times;</button>
+            </div>
+            <div class="modalBody">
+                <div class="modalSection">
+                    <h3 class="heading small">학번 추가</h3>
+                    <form id="studentIdAddForm" class="form">
+                        <div class="inputGroup">
+                            <label class="heading xsmall">학년도</label>
+                            <select id="modalAcademicYear"></select>
+                        </div>
+                        <div class="inputGroup">
+                            <label class="heading xsmall">학번</label>
+                            <input id="modalStudentID" type="text" inputmode="numeric" pattern="\d*" placeholder="12345" maxlength="5">
+                            <p class="inputHint body xsmall">5자리 숫자를 입력하세요.</p>
+                        </div>
+                        <button type="submit" class="primaryButton">추가</button>
+                    </form>
+                </div>
+                <div class="modalSection">
+                    <h3 class="heading small">등록된 학번</h3>
+                    <div id="studentIdList" class="studentIdList">
+                        #if(count(userStudentIDMap) > 0):
+                        #for(userStudentID in userStudentIDMap):
+                        <div>
+                            <h4 class="heading small forceLightWeight">#(userStudentID.year)학년도 <span class="heading small">#(userStudentID.studentID)</span></h4>
+                            <button type="button" class="secondaryButton" onclick="deleteStudentId('#(userStudentID.year)-#(userStudentID.studentID)')">삭제</button>
+                        </div>
+                        #endfor
+                        #else:
+                        <div class="emptyState">
+                            <p class="body medium">등록된 학번이 없습니다.</p>
+                        </div>
+                        #endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Modal -->
+    <div id="securityModal" class="modal">
+        <div class="modalBackdrop"></div>
+        <div class="modalContent">
+            <div class="modalHeader">
+                <h2 class="heading medium">보안 관리</h2>
+                <button class="modalClose heading large">&times;</button>
+            </div>
+            <div class="modalBody">
+                <div class="modalSection">
+                    <h3 class="heading small">패스키 관리</h3>
+                    <p class="body small passkeyHint">새로운 패스키를 추가하거나 기존 패스키의 사용을 중단할 수 있습니다.</p>
+                    <button id="addPasskey" type="button" class="primaryButton buttonLarge">패스키 추가</button>
+                    <p id="passkeyEmpty" class="emptyState body medium passkeyEmpty">등록된 패스키가 없습니다.</p>
+                    <ul id="passkeyList" class="passkeyList"></ul>
+                </div>
+                <div class="modalSection">
+                    <h3 class="heading small">비밀번호 변경</h3>
+                    <form id="passwordChangeForm" class="form">
+                        <div class="inputGroup">
+                            <label class="heading xsmall">현재 비밀번호</label>
+                            <input type="password" id="currentPassword" placeholder="현재 비밀번호">
+                        </div>
+                        <div class="inputGroup">
+                            <label class="heading xsmall">새 비밀번호</label>
+                            <input type="password" id="newPassword" placeholder="새 비밀번호">
+                        </div>
+                        <div class="inputGroup">
+                            <label class="heading xsmall">새 비밀번호 확인</label>
+                            <input type="password" id="confirmPassword" placeholder="새 비밀번호 확인">
+                        </div>
+                        <div class="buttonGroup">
+                            <button type="submit" class="primaryButton">비밀번호 변경</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OAuth Apps Modal -->
+    #if(isDevVerified):
+    <div id="oauthModal" class="modal">
+        <div class="modalBackdrop"></div>
+        <div class="modalContent modalContentWide">
+            <div class="modalHeader">
+                <h2 class="heading medium">OAuth 앱 관리</h2>
+                <button class="modalClose heading large">&times;</button>
+            </div>
+            <div class="modalBody">
+                <div class="modalSection">
+                    <div class="modalSectionHeader">
+                        <h3 class="heading small">내 앱</h3>
+                        <button id="createOAuthApp" type="button" class="primaryButton">새 앱 만들기</button>
+                    </div>
+                    <div id="oauthAppsList" class="oauthAppsList">
+                        <div class="emptyState" id="oauthEmptyState">
+                            <p class="body medium">아직 생성한 앱이 없습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create OAuth App Modal -->
+    <div id="createOAuthAppModal" class="modal">
+        <div class="modalBackdrop"></div>
+        <div class="modalContent modalContentMedium">
+            <div class="modalHeader">
+                <h2 class="heading medium">새 OAuth 앱 만들기</h2>
+                <button class="modalClose heading large">&times;</button>
+            </div>
+            <div class="modalBody">
+                <form id="createOAuthAppForm" class="form">
+                    <div class="inputGroup">
+                        <label class="heading xsmall">앱 이름 *</label>
+                        <input type="text" id="oauthAppName" placeholder="앱 이름" required>
+                    </div>
+                    <div class="inputGroup">
+                        <label class="heading xsmall">앱 설명 *</label>
+                        <textarea id="oauthAppDescription" placeholder="앱에 대한 설명을 입력하세요" rows="3" required></textarea>
+                    </div>
+                    <div class="inputGroup">
+                        <label class="heading xsmall">리다이렉트 URI *</label>
+                        <input type="text" id="oauthRedirectUri" placeholder="https://example.com/callback" required>
+                        <p class="inputHint body xsmall" id="redirectUriHint"></p>
+                        <button type="button" id="addMoreUri" class="secondaryButton addUriButton">+ URI 추가</button>
+                        <div id="additionalUris"></div>
+                    </div>
+                    <div class="inputGroup">
+                        <label class="heading xsmall">홈페이지 URL</label>
+                        <input type="url" id="oauthHomepageUrl" placeholder="https://example.com">
+                    </div>
+                    <div class="inputGroup">
+                        <label class="heading xsmall">로고 URL</label>
+                        <input type="url" id="oauthLogoUrl" placeholder="https://example.com/logo.png">
+                    </div>
+                    <div class="buttonGroup">
+                        <button type="button" class="secondaryButton modalClose">취소</button>
+                        <button type="submit" class="primaryButton">앱 만들기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- OAuth App Details Modal -->
+    <div id="oauthAppDetailsModal" class="modal">
+        <div class="modalBackdrop"></div>
+        <div class="modalContent modalContentMedium">
+            <div class="modalHeader">
+                <h2 class="heading medium">앱 상세 정보</h2>
+                <button class="modalClose heading large">&times;</button>
+            </div>
+            <div class="modalBody">
+                <div class="modalSection">
+                    <div id="appDetailsContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit OAuth App Modal -->
+    <div id="editOAuthAppModal" class="modal">
+        <div class="modalBackdrop"></div>
+        <div class="modalContent modalContentMedium">
+            <div class="modalHeader">
+                <h2 class="heading medium">OAuth 앱 수정</h2>
+                <button class="modalClose heading large">&times;</button>
+            </div>
+            <div class="modalBody">
+                <form id="editOAuthAppForm" class="form">
+                    <input type="hidden" id="editOAuthAppId">
+                    <div class="inputGroup">
+                        <label class="heading xsmall">앱 이름 *</label>
+                        <input type="text" id="editOAuthAppName" placeholder="앱 이름" required>
+                    </div>
+                    <div class="inputGroup">
+                        <label class="heading xsmall">앱 설명 *</label>
+                        <textarea id="editOAuthAppDescription" placeholder="앱에 대한 설명을 입력하세요" rows="3" required></textarea>
+                    </div>
+                    <div class="inputGroup">
+                        <label class="heading xsmall">리다이렉트 URI *</label>
+                        <div id="editRedirectUrisContainer"></div>
+                        <button type="button" id="editAddMoreUri" class="secondaryButton addUriButton">+ 추가 URI</button>
+                    </div>
+                    <div class="inputGroup">
+                        <label class="heading xsmall">홈페이지 URL</label>
+                        <input type="url" id="editOAuthHomepageUrl" placeholder="https://example.com">
+                    </div>
+                    <div class="inputGroup">
+                        <label class="heading xsmall">로고 URL</label>
+                        <input type="url" id="editOAuthLogoUrl" placeholder="https://example.com/logo.png">
+                    </div>
+                    <div class="buttonGroup">
+                        <button type="button" class="secondaryButton modalClose">취소</button>
+                        <button type="submit" class="primaryButton">저장</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    #endif
+
+    <!-- Developer Verification Confirm Modal -->
+    <div id="devVerifyModal" class="modal">
+        <div class="modalBackdrop"></div>
+        <div class="modalContent">
+            <div class="modalHeader">
+                <h2 class="heading medium">개발자 인증</h2>
+                <button class="modalClose heading large">&times;</button>
+            </div>
+            <div class="modalBody">
+                <div class="modalSection">
+                    <p class="body medium" style="margin-bottom: 16px;">
+                        개발자 인증을 위해 프로그래밍 동아리 디스코드 서버 가입 여부를 확인합니다.
+                    </p>
+                    <p class="body small" style="color: var(--gray); margin-bottom: 24px;">
+                        Discord 계정으로 로그인하여 서버 가입 여부를 확인합니다. 
+                        가입되어 있지 않은 경우 동아리 부장에게 문의하여 서버에 가입한 후 다시 시도하세요.
+                    </p>
+                    <div class="buttonGroup">
+                        <button type="button" class="secondaryButton modalClose">취소</button>
+                        <button type="button" class="primaryButton" id="confirmDevVerifyButton">Discord로 인증</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/scripts/home.js"></script>
+    #if(isDevVerified):
+    <script src="/scripts/oauth.js"></script>
+    #endif
+    <script>
+        // Initialize academic year dropdown with server-provided value
+        initAcademicYearDropdown('#(academicYear)');
+    </script>
+        #extend("footer")
     </div>
 </body>
 

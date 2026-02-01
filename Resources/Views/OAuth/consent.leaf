@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>권한 승인 - Gajwa Account</title>
+    <style>
+        @import url("/styles/root.css");
+        @import url("/styles/footer.css");
+        @import url("/styles/oauth.css");
+    </style>
+</head>
+<body>
+    <div class="consent-container">
+        <main class="consent-main">
+            <div class="consent-card">
+                <div class="app-header">
+                    #if(appLogoURL):
+                        <div class="app-logo">
+                            <img src="#(appLogoURL)" alt="#(appName)">
+                        </div>
+                    #endif
+                    <div class="app-name">#(appName)</div>
+                    <div class="app-description">#(appDescription)</div>
+                </div>
+
+                <div class="consent-message">
+                    <strong>#(userName)</strong>님이 사용 중인 Gajwa Account로 로그인하면, <strong>#(appName)</strong>이(가) 다음 정보에 접근할 수 있습니다.
+                </div>
+
+                <div class="user-info">
+                    <span class="label">로그인 ID:</span>
+                    <span class="value">#(userLoginID)</span>
+                </div>
+
+                <div class="scope-section">
+                    <div class="scope-title">요청 권한</div>
+                    <div class="scope-map">
+                        #for(scope in scopes):
+                            <div class="scope-item-wrapper">
+                                <input type="checkbox" class="scope-checkbox" checked disabled>
+                                <div class="scope-item-content">
+                                    #if(scope == "profile"):
+                                        <div class="scope-item-title">프로필 정보</div>
+                                        <div class="scope-item-desc">이름, 학번 등의 기본 정보</div>
+                                    #elseif(scope == "email"):
+                                        <div class="scope-item-title">이메일</div>
+                                        <div class="scope-item-desc">가입할 때 등록한 이메일 주소</div>
+                                    #elseif(scope == "phone"):
+                                        <div class="scope-item-title">전화번호</div>
+                                        <div class="scope-item-desc">등록된 전화번호 정보</div>
+                                    #else:
+                                        <div class="scope-item-title">#(scope)</div>
+                                        <div class="scope-item-desc">추가 권한</div>
+                                    #endif
+                                </div>
+                            </div>
+                        #endfor
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <form method="POST" action="/oauth/authorize/deny">
+                        <button type="submit" class="secondaryButton">취소</button>
+                    </form>
+                    <form method="POST" action="/oauth/authorize/confirm">
+                        <button type="submit" class="primaryButton">승인</button>
+                    </form>
+                </div>
+
+                <div class="consent-footer">
+                    <p>이 앱은 귀하가 승인한 권한 내에서만 정보에 접근할 수 있습니다.<br>
+                    승인을 철회하려면 <a href="/home">계정 설정</a>에서 관리할 수 있습니다.</p>
+                </div>
+            </div>
+        </main>
+
+        #extend("footer")
+    </div>
+</body>
+</html>

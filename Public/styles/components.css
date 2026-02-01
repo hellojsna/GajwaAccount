@@ -1,0 +1,277 @@
+/*
+    components.css
+    GajwaAccount
+
+    Created by Js Na on 2026/02/01.
+    Copyright © 2026 Js Na. All rights reserved.
+*/
+
+.segmentedPicker {
+    display: inline-flex;
+    max-width: 100%;
+    border: 1px solid var(--gray4);
+    border-radius: 0.8rem;
+    margin: 1rem 0;
+    box-sizing: border-box;
+    overflow-x: scroll;
+    background-color: var(--gray6);
+    white-space: nowrap;
+}
+.segmentedPicker button {
+    background-color: transparent;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin: 0.3rem;
+    border-radius: 0.5rem;
+    font-size: var(--font-size-text-medium);
+    color: var(--primaryText);
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+.segmentedPicker button.selected {
+    background-color: var(--blue);
+    color: var(--white);
+}
+.segmentedPicker button:not(.selected):hover {
+    background-color: var(--gray4);
+}
+
+.form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputGroup label {
+    color: var(--primaryText);
+    font-size: var(--font-size-text-medium);
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.inputGroup input {
+    width: 100%;
+    padding: 1.3rem 1.6rem;
+    background-color: var(--tertiaryGroupedBackground);
+    color: var(--primaryText);
+    border: 0.15rem solid var(--separator);
+    border-radius: 1.2rem;
+    font-size: var(--font-size-text-medium);
+    font-weight: 500;
+    box-sizing: border-box;
+    transition: all 0.25s var(--animation-spring);
+}
+
+.inputGroup input::placeholder {
+    color: var(--tertiaryText);
+    font-weight: 400;
+}
+
+.inputGroup input:focus {
+    outline: none;
+    background-color: var(--secondaryGroupedBackground);
+    border-color: var(--blue);
+    box-shadow: 0 0 0 0.4rem rgba(0, 136, 255, 0.1);
+}
+
+.inputGroup textarea {
+    width: 100%;
+    padding: 1.3rem 1.6rem;
+    background-color: var(--tertiaryGroupedBackground);
+    color: var(--primaryText);
+    border: 0.15rem solid var(--separator);
+    border-radius: 1.2rem;
+    font-size: var(--font-size-text-medium);
+    font-weight: 500;
+    box-sizing: border-box;
+    transition: all 0.25s var(--animation-spring);
+    font-family: inherit;
+}
+
+.inputGroup textarea::placeholder {
+    color: var(--tertiaryText);
+    font-weight: 400;
+}
+
+.inputGroup textarea:focus {
+    outline: none;
+    background-color: var(--secondaryGroupedBackground);
+    border-color: var(--blue);
+    box-shadow: 0 0 0 0.4rem rgba(0, 136, 255, 0.1);
+}
+
+.inputGroup select {
+    width: 100%;
+    padding: 1.3rem 1.6rem;
+    background-color: var(--tertiaryGroupedBackground);
+    color: var(--primaryText);
+    border: 0.15rem solid var(--separator);
+    border-radius: 1.2rem;
+    font-size: var(--font-size-text-medium);
+    font-weight: 500;
+    box-sizing: border-box;
+    transition: all 0.25s var(--animation-spring);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1.6rem center;
+}
+
+.inputGroup select:focus {
+    outline: none;
+    background-color: var(--secondaryGroupedBackground);
+    border-color: var(--blue);
+    box-shadow: 0 0 0 0.4rem rgba(0, 136, 255, 0.1);
+}
+
+.inputGroup input.error {
+    border-color: var(--red);
+    background-color: rgba(255, 59, 48, 0.05);
+}
+
+.inputGroup input.error:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 0.4rem rgba(255, 59, 48, 0.1);
+}
+
+.inputGroup input.valid {
+    border-color: var(--green);
+}
+
+.inputGroup input.valid:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 0.4rem rgba(52, 199, 89, 0.1);
+}
+
+.inputHint {
+    margin: 0;
+    color: var(--gray2);
+}
+
+.inputHint.error {
+    color: var(--red);
+    font-weight: 500;
+}
+
+.inputHint.valid {
+    color: var(--green);
+    font-weight: 500;
+}
+
+.studentIdInput {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background-color: var(--tertiaryGroupedBackground);
+    border: 0.15rem solid var(--separator);
+    border-radius: 1.2rem;
+    padding: 0 1.6rem;
+    transition: all 0.25s var(--animation-spring);
+}
+
+.studentIdInput:focus-within {
+    background-color: var(--secondaryGroupedBackground);
+    border-color: var(--blue);
+    box-shadow: 0 0 0 0.4rem rgba(0, 136, 255, 0.1);
+}
+
+.studentIdInput.error {
+    border-color: var(--red);
+    background-color: rgba(255, 59, 48, 0.05);
+}
+
+.studentIdInput.error:focus-within {
+    border-color: var(--red);
+    box-shadow: 0 0 0 0.4rem rgba(255, 59, 48, 0.1);
+}
+
+.studentIdInput.valid {
+    border-color: var(--green);
+}
+
+.studentIdInput.valid:focus-within {
+    border-color: var(--green);
+    box-shadow: 0 0 0 0.4rem rgba(52, 199, 89, 0.1);
+}
+
+.studentIdInput span {
+    color: var(--gray);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.studentIdInput input {
+    flex: 1;
+    padding: 1.3rem 0;
+    background: transparent;
+    border: none;
+    box-shadow: none !important;
+}
+
+.studentIdInput input:focus {
+    background: transparent;
+    box-shadow: none !important;
+}
+
+/* Button Styles */
+button {
+    padding: 1.2rem 2rem;
+    border: none;
+    border-radius: 1.2rem;
+    font-size: var(--font-size-text-medium);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s var(--animation-spring);
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.primaryButton {
+    background-color: var(--blue);
+    color: var(--primaryBackground);
+    box-shadow: 0 0.4rem 1.2rem rgba(0, 136, 255, 0.3);
+}
+
+.primaryButton:active:not(:disabled) {
+    opacity: 0.8;
+}
+
+.primaryButton:disabled {
+    background-color: var(--tertiaryGroupedBackground);
+    color: var(--gray2);
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.secondaryButton {
+    background-color: var(--tertiaryGroupedBackground);
+    color: var(--primaryText);
+    box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.05);
+}
+
+.secondaryButton:active {
+    opacity: 0.8;
+}
+
+.buttonLarge {
+    width: 100%;
+    padding: 1.4rem 2rem;
+}
+
+.buttonGroup {
+    display: flex;
+    margin-top: 1rem;
+    gap: 1rem;
+}
+
+.buttonGroup button {
+    flex: 1;
+}

@@ -35,6 +35,11 @@ public func configure(_ app: Application) async throws {
     app.migrations.add(CreateUser())
     app.migrations.add(CreateUserVerification())
     app.migrations.add(CreatePasskey())
+    app.migrations.add(CreateOAuthClient())
+    app.migrations.add(CreateOAuthToken())
+    app.migrations.add(CreateOAuthAuthorizationCode())
+    app.migrations.add(RenameDiscordTokenToDevVerifyDate())
+    app.migrations.add(AddPKCEToOAuthAuthorizationCode())
 
     try await app.autoMigrate()
 

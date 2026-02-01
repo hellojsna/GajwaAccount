@@ -1,0 +1,86 @@
+/*
+    passkey.css
+    GajwaAccount
+
+    Created by Js Na on 2026/01/31.
+    Copyright © 2026 Js Na. All rights reserved.
+*/
+
+.passkeyContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.passkeyMain {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.passkeyCard {
+    width: 100%;
+    max-width: 52rem;
+    background-color: var(--secondaryGroupedBackground);
+    border-radius: 2rem;
+    padding: 3rem;
+    box-shadow:
+        0 0.4rem 2rem rgba(0, 0, 0, 0.06),
+        0 0 0 0.1rem rgba(0, 0, 0, 0.02);
+}
+
+.passkeyList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin: 2rem 0 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.passkeyItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 1.6rem;
+    background-color: var(--tertiaryGroupedBackground);
+    border: 0.1rem solid var(--separator);
+    border-radius: 1rem;
+}
+
+.passkeyMeta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.passkeyId {
+    font-weight: 600;
+}
+
+.passkeyActions {
+    display: flex;
+    gap: 0.8rem;
+}
+
+
+.passkeyEmpty {
+    margin: 2rem 0;
+    text-align: center;
+    color: var(--gray2);
+}
+
+.buttonRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.buttonRow .button {
+    flex: 1;
+}

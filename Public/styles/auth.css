@@ -25,15 +25,46 @@ body {
     animation: fadeIn 0.8s var(--animation-spring);
 }
 
-.logoContainer h1 {
-    margin: 0 0 0.5rem 0;
-    color: var(--blue);
-    letter-spacing: -0.03em;
+.titleBar {
+    padding: 1.2rem 0 2.4rem;
+    animation: fadeIn 0.8s var(--animation-spring);
 }
 
-.logoContainer p {
-    margin: 0;
-    color: var(--secondaryText);
+.titleBarContent {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.titleBarLeft,
+.titleBarRight {
+    min-width: 6rem;
+}
+
+.titleBarTitle {
+    text-align: center;
+}
+
+.titleBarBack {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--blue);
+    font-weight: 600;
+}
+
+.titleBarBackIcon {
+    font-size: 2.4rem;
+    line-height: 1;
+    margin-top: -0.2rem;
+}
+
+.logoContainer h1 {
+    margin-bottom: 0.5rem;
+    color: var(--blue);
+    letter-spacing: -0.03em;
 }
 
 .authMain {
@@ -72,15 +103,9 @@ body {
 }
 
 .cardHeader h2 {
-    margin: 0 0 0.8rem 0;
-    color: var(--primaryText);
+    margin-bottom: 0.8rem;
     white-space: pre-line;
     line-height: 1.3;
-}
-
-.cardHeader p {
-    margin: 0;
-    color: var(--gray);
 }
 
 .cardFooter {
@@ -88,10 +113,6 @@ body {
     text-align: center;
     padding-top: 2rem;
     border-top: 0.1rem solid var(--separator);
-}
-
-.cardFooter p {
-    margin: 0;
     color: var(--gray);
 }
 
@@ -119,14 +140,6 @@ body {
 .progressContainer p {
     text-align: center;
     color: var(--gray2);
-    margin: 0;
-}
-
-.form {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
 }
 
 .form+.button {
@@ -152,222 +165,20 @@ body {
     animation: slideInLeft 0.4s var(--animation-spring);
 }
 
-.inputGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-}
-
-.inputGroup label {
-    color: var(--primaryText);
-    font-size: var(--font-size-text-medium);
-    font-weight: 600;
-    margin-left: 0.2rem;
-}
-
-.inputGroup input {
-    width: 100%;
-    padding: 1.3rem 1.6rem;
-    background-color: var(--tertiaryGroupedBackground);
-    color: var(--primaryText);
-    border: 0.15rem solid var(--separator);
-    border-radius: 1.2rem;
-    font-size: var(--font-size-text-medium);
-    font-weight: 500;
-    box-sizing: border-box;
-    transition: all 0.25s var(--animation-spring);
-}
-
-.inputGroup input::placeholder {
-    color: var(--tertiaryText);
-    font-weight: 400;
-}
-
-.inputGroup input:focus {
-    outline: none;
-    background-color: var(--secondaryGroupedBackground);
-    border-color: var(--blue);
-    box-shadow: 0 0 0 0.4rem rgba(0, 136, 255, 0.1);
-}
-
-.inputGroup input:hover:not(:focus) {
-    border-color: var(--gray3);
-}
-
-.inputGroup input.error {
-    border-color: var(--red);
-    background-color: rgba(255, 59, 48, 0.05);
-}
-
-.inputGroup input.error:focus {
-    border-color: var(--red);
-    box-shadow: 0 0 0 0.4rem rgba(255, 59, 48, 0.1);
-}
-
-.inputGroup input.valid {
-    border-color: var(--green);
-}
-
-.inputGroup input.valid:focus {
-    border-color: var(--green);
-    box-shadow: 0 0 0 0.4rem rgba(52, 199, 89, 0.1);
-}
-
-.inputHint {
-    margin: 0;
-    margin-left: 0.2rem;
-    color: var(--gray2);
-}
-
-.inputHint.error {
-    color: var(--red);
-    font-weight: 500;
-}
-
-.inputHint.valid {
-    color: var(--green);
-    font-weight: 500;
-}
-
-.studentIdInput {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    background-color: var(--tertiaryGroupedBackground);
-    border: 0.15rem solid var(--separator);
-    border-radius: 1.2rem;
-    padding: 0 1.6rem;
-    transition: all 0.25s var(--animation-spring);
-}
-
-.studentIdInput:focus-within {
-    background-color: var(--secondaryGroupedBackground);
-    border-color: var(--blue);
-    box-shadow: 0 0 0 0.4rem rgba(0, 136, 255, 0.1);
-}
-
-.studentIdInput:hover:not(:focus-within) {
-    border-color: var(--gray3);
-}
-
-.studentIdInput.error {
-    border-color: var(--red);
-    background-color: rgba(255, 59, 48, 0.05);
-}
-
-.studentIdInput.error:focus-within {
-    border-color: var(--red);
-    box-shadow: 0 0 0 0.4rem rgba(255, 59, 48, 0.1);
-}
-
-.studentIdInput.valid {
-    border-color: var(--green);
-}
-
-.studentIdInput.valid:focus-within {
-    border-color: var(--green);
-    box-shadow: 0 0 0 0.4rem rgba(52, 199, 89, 0.1);
-}
-
-.studentIdInput span {
-    color: var(--gray);
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.studentIdInput input {
-    flex: 1;
-    padding: 1.3rem 0;
-    background: transparent;
-    border: none;
-    box-shadow: none !important;
-}
-
-.studentIdInput input:focus {
-    background: transparent;
-    box-shadow: none !important;
-}
-
-.button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-    padding: 1.2rem 2rem;
-    border: none;
-    border-radius: 1.2rem;
-    font-size: var(--font-size-text-medium);
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s var(--animation-spring);
-    white-space: nowrap;
-}
-
-.buttonLarge {
-    width: 100%;
-    padding: 1.4rem 2rem;
-}
-
-.buttonPrimary {
-    background-color: var(--blue);
-    color: var(--primaryBackground);
-    box-shadow: 0 0.4rem 1.2rem rgba(0, 136, 255, 0.3);
-}
-
-.buttonPrimary:hover:not(:disabled) {
-    transform: translateY(-0.2rem);
-    box-shadow: 0 0.6rem 2rem rgba(0, 136, 255, 0.4);
-}
-
-.buttonPrimary:active:not(:disabled) {
-    transform: translateY(0);
-    box-shadow: 0 0.2rem 0.8rem rgba(0, 136, 255, 0.25);
-}
-
-.buttonPrimary:disabled {
-    background-color: var(--tertiaryGroupedBackground);
-    color: var(--gray2);
-    box-shadow: none;
-    cursor: not-allowed;
-    transform: none;
-    opacity: 0.6;
-}
-
-.buttonSecondary {
-    background-color: var(--tertiaryGroupedBackground);
-    color: var(--primaryText);
-    box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.05);
-}
-
-.buttonSecondary:hover {
-    background-color: var(--gray4);
-    transform: translateY(-0.1rem);
-}
-
-.buttonSecondary:active {
-    transform: translateY(0);
-}
-
-.buttonGroup {
-    display: flex;
-    gap: 1rem;
-}
-
-.buttonGroup .button {
-    flex: 1;
-}
+/* root.css에서 button, .buttonLarge, .buttonGroup 스타일 상속 */
 
 .link {
     color: var(--blue);
     text-decoration: none;
     font-weight: 600;
-    transition: opacity 0.2s;
     border-bottom: 0.1rem solid transparent;
 }
 
-.link:hover {
-    opacity: 0.7;
-    border-bottom-color: var(--blue);
+button.link {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: inherit;
 }
 
 .authFooter {
@@ -376,8 +187,7 @@ body {
     margin-top: auto;
 }
 
-.authFooter p {
-    margin: 0;
+.authFooter {
     color: var(--gray2);
 }
 
@@ -390,9 +200,13 @@ body {
         padding: 1rem 0 2rem;
     }
 
+    .titleBar {
+        padding: 0.8rem 0 1.6rem;
+    }
+
     .card {
-        padding: 2.5rem 2rem;
         border-radius: 1.6rem;
+        padding: 2.5rem 2rem;
     }
 
     .cardHeader {
@@ -418,8 +232,8 @@ body {
     }
 
     .card {
-        padding: 2rem 1.5rem;
         border-radius: 1.2rem;
+        padding: 2rem 1.5rem;
     }
 
     .buttonGroup {

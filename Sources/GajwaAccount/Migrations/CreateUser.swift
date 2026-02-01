@@ -18,7 +18,7 @@ struct CreateUser: AsyncMigration {
             .field("user_student_id_list", .array(of: .string), .required) // 학번 리스트 (매년 변경하는 것이 아닌 추가) YYYY-학번 형식
             .field("user_email", .string, .required) // 이메일 주소
             .field("user_phone", .string) // 전화번호
-            .field("user_discord_token", .string) // Discord OAuth2 (Gajwa Dev)
+            .field("user_dev_verify_date", .datetime) // 개발자 인증 날짜
             .unique(on: "user_login_id")
             .create()
     }
