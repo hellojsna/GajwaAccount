@@ -11,6 +11,8 @@ import Fluent
 import FluentPostgresDriver
 import Leaf
 import Vapor
+import Queues
+import QueuesFluentDriver
 
 // configures your application
 public func configure(_ app: Application) async throws {
@@ -32,14 +34,23 @@ public func configure(_ app: Application) async throws {
     app.middleware.use(app.sessions.middleware)
     app.middleware.use(User.asyncSessionAuthenticator())
     
+    // Configure Queues (using Fluent/PostgreSQL)
+    app.queues.use(.fluent())
+    
+    // Register scheduled jobs
+    app.queues.schedule(DeleteDeactivatedUsersJob())
+        .daily()
+        .at(.midnight)
+    
+    // Queues migrations
+    app.migrations.add(JobModelMigration())
+    
     app.migrations.add(CreateUser())
     app.migrations.add(CreateUserVerification())
     app.migrations.add(CreatePasskey())
     app.migrations.add(CreateOAuthClient())
     app.migrations.add(CreateOAuthToken())
     app.migrations.add(CreateOAuthAuthorizationCode())
-    app.migrations.add(RenameDiscordTokenToDevVerifyDate())
-    app.migrations.add(AddPKCEToOAuthAuthorizationCode())
 
     try await app.autoMigrate()
 
@@ -47,4 +58,7 @@ public func configure(_ app: Application) async throws {
 
     // register routes
     try routes(app)
+    
+    // Start scheduled jobs in-process
+    try app.queues.startScheduledJobs()
 }

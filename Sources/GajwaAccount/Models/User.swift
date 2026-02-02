@@ -36,9 +36,12 @@ final class User: Model, ModelSessionAuthenticatable, @unchecked Sendable {
     @OptionalField(key: "user_dev_verify_date")
     var userDevVerifyDate: Date?
     
+    @OptionalField(key: "user_deactivate_date")
+    var userDeactivateDate: Date?
+    
     init() { }
 
-    init(id: UUID? = nil, userLoginID: String, userLoginPassword: String, userName: String, userStudentIDList: [String], userEmail: String, userPhone: String? = nil, userDevVerifyDate: Date? = nil) {
+    init(id: UUID? = nil, userLoginID: String, userLoginPassword: String, userName: String, userStudentIDList: [String], userEmail: String, userPhone: String? = nil, userDevVerifyDate: Date? = nil, userDeactivateDate: Date? = nil) {
         self.id = id
         self.userLoginID = userLoginID
         self.userLoginPassword = userLoginPassword
@@ -47,5 +50,6 @@ final class User: Model, ModelSessionAuthenticatable, @unchecked Sendable {
         self.userEmail = userEmail
         self.userPhone = userPhone
         self.userDevVerifyDate = userDevVerifyDate
+        self.userDeactivateDate = userDeactivateDate
     }
 }

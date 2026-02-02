@@ -19,6 +19,8 @@ struct CreateOAuthAuthorizationCode: AsyncMigration {
             .field("scope", .string, .required)
             .field("expires_at", .datetime, .required)
             .field("is_used", .bool, .required)
+            .field("code_challenge", .string)
+            .field("code_challenge_method", .string)
             .field("created_at", .datetime)
             .unique(on: "code")
             .create()

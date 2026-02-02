@@ -37,7 +37,7 @@
                 <div class="card">
                     <div class="cardHeader">
                         <div class="cardTitle">
-                            <h3 class="heading medium">개인 정보</h3>
+                            <h3 class="heading medium">계정</h3>
                         </div>
                         <button class="editButton" data-modal="profileModal">관리</button>
                     </div>
@@ -141,11 +141,12 @@
         <div class="modalBackdrop"></div>
         <div class="modalContent">
             <div class="modalHeader">
-                <h2 class="heading medium">프로필 편집</h2>
+                <h2 class="heading medium">계정 관리</h2>
                 <button class="modalClose heading large">&times;</button>
             </div>
             <div class="modalBody">
                 <div class="modalSection">
+                    <h3 class="heading small">프로필 편집</h3>
                     <form id="profileEditForm" class="form">
                         <div class="inputGroup">
                             <label class="heading xsmall">이름</label>
@@ -160,6 +161,16 @@
                             <button type="submit" class="primaryButton">저장</button>
                         </div>
                     </form>
+                </div>
+                <div class="modalSection" style="border-top: 0.1rem solid var(--separator); padding-top: 2rem;">
+                    <h3 class="heading small">계정 탈퇴</h3>
+                    <p class="body small" style="color: var(--gray); margin: 1rem 0 1.5rem;">
+                        계정을 탈퇴하면 7일 후 모든 데이터가 영구적으로 삭제됩니다. 
+                        7일 이내에 다시 로그인하면 계정을 복구할 수 있습니다.
+                    </p>
+                    <button type="button" id="deactivateAccountButton" class="secondaryButton buttonLarge" style="color: #d32f2f; border-color: #d32f2f;">
+                        계정 탈퇴
+                    </button>
                 </div>
             </div>
         </div>

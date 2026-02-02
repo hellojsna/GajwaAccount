@@ -19,6 +19,7 @@ struct CreateUser: AsyncMigration {
             .field("user_email", .string, .required) // 이메일 주소
             .field("user_phone", .string) // 전화번호
             .field("user_dev_verify_date", .datetime) // 개발자 인증 날짜
+            .field("user_deactivate_date", .datetime) // 계정 탈퇴 날짜
             .unique(on: "user_login_id")
             .create()
     }

@@ -121,7 +121,15 @@ struct UserAPIController: RouteCollection {
                         credential.currentSignCount = Int(verifiedAuthentication.newSignCount)
                         try await credential.save(on: req.db)
                         
-                        req.auth.login(credential.user)
+                        let user = credential.user
+                        
+                        // 탈퇴한 계정인지 확인 후 재활성화
+                        if user.userDeactivateDate != nil {
+                            user.userDeactivateDate = nil
+                            try await user.save(on: req.db)
+                        }
+                        
+                        req.auth.login(user)
                         
                         // Check for redirect URL (from OAuth flow)
                         let redirectURL = req.session.data["oauth_redirect_after_login"] ?? "/home"
@@ -151,6 +159,12 @@ struct UserAPIController: RouteCollection {
                         }
                         if verifiedPlain && !verifiedHashed {
                             user.userLoginPassword = try Bcrypt.hash(request.userLoginPassword)
+                            try await user.save(on: req.db)
+                        }
+                        
+                        // 탈퇴한 계정인지 확인 후 재활성화
+                        if user.userDeactivateDate != nil {
+                            user.userDeactivateDate = nil
                             try await user.save(on: req.db)
                         }
                         
@@ -242,6 +256,25 @@ struct UserAPIController: RouteCollection {
                         // 새 비밀번호 해시화
                         user.userLoginPassword = try Bcrypt.hash(request.newPassword)
                         try await user.save(on: req.db)
+                        
+                        return HTTPStatus.ok
+                    }
+                    
+                    protected.post("deactivate") { req async throws -> HTTPStatus in
+                        let user = try req.auth.require(User.self)
+                        
+                        // 이미 탈퇴한 계정인지 확인
+                        if user.userDeactivateDate != nil {
+                            throw Abort(.badRequest, reason: "Account is already deactivated")
+                        }
+                        
+                        // 탈퇴 날짜 설정
+                        user.userDeactivateDate = Date()
+                        try await user.save(on: req.db)
+                        
+                        // 로그아웃
+                        req.auth.logout(User.self)
+                        req.session.destroy()
                         
                         return HTTPStatus.ok
                     }

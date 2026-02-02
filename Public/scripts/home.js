@@ -379,11 +379,37 @@ if (confirmDevVerifyButton) {
     });
 }
 
+// Account Deactivation
+const deactivateAccountButton = document.getElementById("deactivateAccountButton");
+if (deactivateAccountButton) {
+    deactivateAccountButton.addEventListener("click", async () => {
+        const confirmed = confirm(`정말 탈퇴하시겠습니까?\n\n7일 이내에 계정에 로그인하면 탈퇴가 취소됩니다.\n7일 이내에 로그인하지 않으면 데이터가 영구 삭제되며, 삭제된 데이터는 복구되지 않습니다.`);
+        
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch("/api/v1/user/deactivate", {
+                method: "POST"
+            });
+            
+            if (response.ok) {
+                alert("계정 탈퇴가 요청되었습니다.\n7일 이내에 로그인하지 않으면 데이터가 영구 삭제되며, 삭제된 데이터는 복구되지 않습니다.");
+                window.location.href = "/auth";
+            } else {
+                throw new Error("Failed to deactivate account");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("계정 탈퇴에 실패했습니다.");
+        }
+    });
+}
+
 // Discord OAuth 콜백 후 상태 확인
 const urlParams = new URLSearchParams(window.location.search);
 const devVerifyStatus = urlParams.get('dev_verify_status');
 if (devVerifyStatus === 'success') {
-    alert("개발자 인증이 완료되었습니다!");
+    alert("Hello, Gajwa!\n개발자 인증이 완료되었습니다.");
     // URL 파라미터 제거 후 페이지 새로고침
     window.location.href = window.location.pathname;
 } else if (devVerifyStatus === 'not_member') {
