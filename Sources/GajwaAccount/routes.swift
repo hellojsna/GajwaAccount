@@ -21,18 +21,25 @@ func routes(_ app: Application) throws {
         try await req.view.render("index", ["title": "Hello Vapor!"])
     }
     
-    app.get("auth") { req async throws -> View in
+    app.get("auth") { req async throws -> Response in
+        // 이미 로그인된 사용자는 /home으로 리다이렉트
+        if req.auth.has(User.self) {
+            return req.redirect(to: "/home")
+        }
+        
         // academicYear 기준: 3월
         let academicYear: String = getAcademicYear()
         return try await req.view.render("auth", [
             "academicYear": academicYear,
             "title": "Gajwa Account"
-        ])
+        ]).encodeResponse(for: req)
     }
     
-    let auth = app.grouped(User.asyncSessionAuthenticator()).grouped(User.redirectMiddleware(path: "/auth"))
+    let auth = app.grouped(User.redirectMiddleware(path: "/auth"))
     auth.get("home") { req async throws -> View in
         let user = try req.auth.require(User.self)
+        req.logger.info("Home - User authenticated: \(user.userLoginID)")
+        req.logger.info("Home - Session ID: \(req.session.id?.string ?? "no session")")
         struct userStudentIDMap: Content {
             let year: String
             let studentID: String

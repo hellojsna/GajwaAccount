@@ -185,7 +185,7 @@ struct UserAPIController: RouteCollection {
                 }
 
                 apiv1.group("user") { user in
-                    let protected = user.grouped(User.asyncSessionAuthenticator()).grouped(User.guardMiddleware())
+                    let protected = user.grouped(User.guardMiddleware())
 
                     protected.patch("profile") { req async throws -> HTTPStatus in
                         struct UpdateProfileRequest: Content {
@@ -281,7 +281,7 @@ struct UserAPIController: RouteCollection {
                 }
 
                 apiv1.group("passkeys") { passkeys in
-                    let protected = passkeys.grouped(User.asyncSessionAuthenticator()).grouped(User.guardMiddleware())
+                    let protected = passkeys.grouped(User.guardMiddleware())
 
                     protected.get { req async throws -> [PasskeySummary] in
                         let user = try req.auth.require(User.self)

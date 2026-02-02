@@ -21,7 +21,6 @@ struct CreateOAuthClient: AsyncMigration {
             .field("logo_url", .string)
             .field("is_confidential", .bool, .required)
             .field("developer_id", .uuid, .required, .references("users", "id", onDelete: .cascade))
-            .field("scopes", .array(of: .string), .required)
             .field("created_at", .datetime)
             .field("updated_at", .datetime)
             .unique(on: "client_id")

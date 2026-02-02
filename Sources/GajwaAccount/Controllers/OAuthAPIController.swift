@@ -76,7 +76,7 @@ struct OAuthAPIController: RouteCollection {
     func boot(routes: any RoutesBuilder) throws {
         // MARK: - Developer App Management (Requires Authentication)
         routes.group("api", "v1", "oauth") { oauth in
-            let protected = oauth.grouped(User.asyncSessionAuthenticator()).grouped(User.guardMiddleware())
+            let protected = oauth.grouped(User.guardMiddleware())
 
             protected.group("apps") { apps in
                 // Create OAuth app
@@ -87,7 +87,6 @@ struct OAuthAPIController: RouteCollection {
                         let redirectURIs: [String]
                         let homepageURL: String?
                         let logoURL: String?
-                        let scopes: [String]?
                     }
 
                     let developer = try req.auth.require(User.self)
@@ -113,8 +112,7 @@ struct OAuthAPIController: RouteCollection {
                         redirectURIs: request.redirectURIs,
                         homepageURL: request.homepageURL,
                         logoURL: request.logoURL,
-                        developerID: developerID,
-                        scopes: request.scopes ?? ["profile", "email"]
+                        developerID: developerID
                     )
 
                     try await oauthClient.create(on: req.db)
@@ -160,7 +158,6 @@ struct OAuthAPIController: RouteCollection {
                         let redirectURIs: [String]?
                         let homepageURL: String?
                         let logoURL: String?
-                        let scopes: [String]?
                     }
 
                     guard let id = req.parameters.get("id", as: UUID.self) else {
@@ -197,9 +194,6 @@ struct OAuthAPIController: RouteCollection {
                     }
                     if let logoURL = request.logoURL {
                         client.logoURL = logoURL
-                    }
-                    if let scopes = request.scopes {
-                        client.scopes = scopes
                     }
 
                     try await client.save(on: req.db)
@@ -341,131 +335,133 @@ struct OAuthAPIController: RouteCollection {
             )
         }
         
-        routes.group("oauth") { oauthRoutes in
-            // Authorization endpoint (requires authentication)
-            oauthRoutes.get("authorize") { req async throws -> Response in
-                struct AuthorizeQuery: Content {
-                    let clientID: String
-                    let redirectURI: String
-                    let scope: String?
-                    let state: String?
-                    let responseType: String?
-                    let codeChallenge: String?
-                    let codeChallengeMethod: String?
+        // OAuth authorize endpoint (uses global session authentication from configure.swift)
+        routes.get("oauth", "authorize") { req async throws -> Response in
+            struct AuthorizeQuery: Content {
+                let clientID: String
+                let redirectURI: String
+                let scope: String?
+                let state: String?
+                let responseType: String?
+                let codeChallenge: String?
+                let codeChallengeMethod: String?
 
-                    enum CodingKeys: String, CodingKey {
-                        case clientID = "client_id"
-                        case redirectURI = "redirect_uri"
-                        case scope
-                        case state
-                        case responseType = "response_type"
-                        case codeChallenge = "code_challenge"
-                        case codeChallengeMethod = "code_challenge_method"
-                    }
-                }
-
-                // Require user to be logged in
-                guard let user = req.auth.get(User.self) else {
-                    // Store the OAuth authorize URL in session for redirect after login
-                    let oauthAuthorizeURL = "/oauth/authorize?\(req.url.query ?? "")"
-                    req.session.data["oauth_redirect_after_login"] = oauthAuthorizeURL
-                    return req.redirect(to: "/auth")
-                }
-
-                do {
-                    let query = try req.query.decode(AuthorizeQuery.self)
-                    let responseType = query.responseType ?? "code"
-
-                    // Validate response_type
-                    guard responseType == "code" else {
-                        return redirectWithError(
-                            to: query.redirectURI,
-                            error: .unsupportedResponseType,
-                            state: query.state
-                        )
-                    }
-
-                    // Validate client
-                    guard let client = try await OAuthClient.query(on: req.db)
-                        .filter(\.$clientID == query.clientID)
-                        .first() else {
-                        return redirectWithError(
-                            to: query.redirectURI,
-                            error: .unauthorizedClient,
-                            description: "Invalid client_id",
-                            state: query.state
-                        )
-                    }
-
-                    // Validate redirect_uri
-                    guard client.redirectURIs.contains(query.redirectURI) else {
-                        // Cannot redirect to invalid URI - show error page
-                        throw Abort(.badRequest, reason: "Invalid redirect_uri")
-                    }
-
-                    // Validate PKCE if provided
-                    if let codeChallenge = query.codeChallenge {
-                        let challengeMethod = query.codeChallengeMethod ?? "plain"
-                        guard ["plain", "S256"].contains(challengeMethod) else {
-                            return redirectWithError(
-                                to: query.redirectURI,
-                                error: .invalidRequest,
-                                description: "Invalid code_challenge_method",
-                                state: query.state
-                            )
-                        }
-                        // Store for later verification
-                        req.session.data["oauth_code_challenge"] = codeChallenge
-                        req.session.data["oauth_code_challenge_method"] = challengeMethod
-                    }
-
-                    // Validate and store scope
-                    let requestedScopes = (query.scope ?? "profile email").split(separator: " ").map(String.init)
-                    let validScopes = ["profile", "email", "phone"]
-                    
-                    for scope in requestedScopes {
-                        guard validScopes.contains(scope) else {
-                            return redirectWithError(
-                                to: query.redirectURI,
-                                error: .invalidScope,
-                                description: "Invalid scope: \(scope)",
-                                state: query.state
-                            )
-                        }
-                    }
-
-                    // Store authorization request in session for consent screen
-                    req.session.data["oauth_client_id"] = query.clientID
-                    req.session.data["oauth_redirect_uri"] = query.redirectURI
-                    req.session.data["oauth_scope"] = requestedScopes.joined(separator: " ")
-                    req.session.data["oauth_state"] = query.state
-
-                    struct ConsentContext: Content {
-                        let appName: String
-                        let appDescription: String
-                        let appLogoURL: String?
-                        let userName: String
-                        let userLoginID: String
-                        let scopes: [String]
-                    }
-
-                    let context = ConsentContext(
-                        appName: client.appName,
-                        appDescription: client.appDescription,
-                        appLogoURL: client.logoURL,
-                        userName: user.userName,
-                        userLoginID: user.userLoginID,
-                        scopes: requestedScopes
-                    )
-
-                    return try await req.view.render("OAuth/consent", context).encodeResponse(for: req)
-                } catch is DecodingError {
-                    throw Abort(.badRequest, reason: "Missing or invalid parameters")
-                } catch {
-                    throw error
+                enum CodingKeys: String, CodingKey {
+                    case clientID = "client_id"
+                    case redirectURI = "redirect_uri"
+                    case scope
+                    case state
+                    case responseType = "response_type"
+                    case codeChallenge = "code_challenge"
+                    case codeChallengeMethod = "code_challenge_method"
                 }
             }
 
+            // Require user to be logged in
+            req.logger.info("OAuth authorize - Session ID: \(req.session.id?.string ?? "no session")")
+            req.logger.info("OAuth authorize - Request headers: \(req.headers)")
+            req.logger.info("OAuth authorize - Cookies: \(req.cookies.all)")
+            
+            let user = req.auth.get(User.self)
+            req.logger.info("OAuth authorize - User authenticated: \(user != nil)")
+            if let user = user {
+                req.logger.info("OAuth authorize - User ID: \(user.id?.uuidString ?? "nil"), Login ID: \(user.userLoginID)")
+            }
+            
+            guard let user = user else {
+                req.logger.info("OAuth authorize - Redirecting to /auth")
+                // Store the OAuth authorize URL in session for redirect after login
+                let oauthAuthorizeURL = "/oauth/authorize?\(req.url.query ?? "")"
+                req.session.data["oauth_redirect_after_login"] = oauthAuthorizeURL
+                return req.redirect(to: "/auth")
+            }
+            
+            req.logger.info("OAuth authorize - User is logged in, proceeding to consent")
+
+            do {
+                let query = try req.query.decode(AuthorizeQuery.self)
+                let responseType = query.responseType ?? "code"
+
+                // Validate response_type
+                guard responseType == "code" else {
+                    return redirectWithError(
+                        to: query.redirectURI,
+                        error: .unsupportedResponseType,
+                        state: query.state
+                    )
+                }
+
+                // Validate client
+                guard let client = try await OAuthClient.query(on: req.db)
+                    .filter(\.$clientID == query.clientID)
+                    .first() else {
+                    return redirectWithError(
+                        to: query.redirectURI,
+                        error: .unauthorizedClient,
+                        description: "Invalid client_id",
+                        state: query.state
+                    )
+                }
+
+                // Validate redirect_uri
+                guard client.redirectURIs.contains(query.redirectURI) else {
+                    // Cannot redirect to invalid URI - show error page
+                    throw Abort(.badRequest, reason: "Invalid redirect_uri")
+                }
+
+                // Validate PKCE if provided
+                if let codeChallenge = query.codeChallenge {
+                    let challengeMethod = query.codeChallengeMethod ?? "plain"
+                    guard ["plain", "S256"].contains(challengeMethod) else {
+                        return redirectWithError(
+                            to: query.redirectURI,
+                            error: .invalidRequest,
+                            description: "Invalid code_challenge_method",
+                            state: query.state
+                        )
+                    }
+                    // Store for later verification
+                    req.session.data["oauth_code_challenge"] = codeChallenge
+                    req.session.data["oauth_code_challenge_method"] = challengeMethod
+                }
+
+                // Internal developer API: always grant all scopes
+                let allScopes = ["profile", "email", "phone", "student_id", "developer"]
+
+                // Store authorization request in session for consent screen
+                req.session.data["oauth_client_id"] = query.clientID
+                req.session.data["oauth_redirect_uri"] = query.redirectURI
+                req.session.data["oauth_scope"] = allScopes.joined(separator: " ")
+                req.session.data["oauth_state"] = query.state
+
+                struct ConsentContext: Content {
+                    let appName: String
+                    let appDescription: String
+                    let appLogoURL: String?
+                    let userName: String
+                    let userLoginID: String
+                    let scopes: [String]
+                }
+
+                let context = ConsentContext(
+                    appName: client.appName,
+                    appDescription: client.appDescription,
+                    appLogoURL: client.logoURL,
+                    userName: user.userName,
+                    userLoginID: user.userLoginID,
+                    scopes: allScopes
+                )
+
+                return try await req.view.render("OAuth/consent", context).encodeResponse(for: req)
+            } catch is DecodingError {
+                throw Abort(.badRequest, reason: "Missing or invalid parameters")
+            } catch {
+                throw error
+            }
+        }
+        
+        // OAuth token and userinfo endpoints (no session auth required)
+        routes.group("oauth") { oauthRoutes in
             // Token endpoint (no auth required - clients authenticate via credentials)
             oauthRoutes.post("token") { req async throws -> OAuthTokenResponse in
                 struct TokenRequest: Content {
@@ -694,6 +690,8 @@ struct UserInfoResponse: Content {
     let userName: String?
     let userEmail: String?
     let userPhone: String?
+    let userStudentIDList: [String]?
+    let userDevVerifyDate: Date?
 
     init(from user: User, scopes: String) {
         let scopeList = scopes.split(separator: " ").map(String.init)
@@ -720,6 +718,18 @@ struct UserInfoResponse: Content {
         } else {
             self.userPhone = nil
         }
+        
+        if scopeList.contains("student_id") {
+            self.userStudentIDList = user.userStudentIDList
+        } else {
+            self.userStudentIDList = nil
+        }
+        
+        if scopeList.contains("developer") {
+            self.userDevVerifyDate = user.userDevVerifyDate
+        } else {
+            self.userDevVerifyDate = nil
+        }
     }
 
     enum CodingKeys: String, CodingKey {
@@ -728,5 +738,7 @@ struct UserInfoResponse: Content {
         case userName = "name"
         case userEmail = "email"
         case userPhone = "phone"
+        case userStudentIDList = "student_id_list"
+        case userDevVerifyDate = "dev_verify_date"
     }
 }

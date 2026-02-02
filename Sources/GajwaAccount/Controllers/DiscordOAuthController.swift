@@ -18,7 +18,7 @@ struct DevVerifyStatus: Content {
 struct DiscordOAuthController: RouteCollection {
     func boot(routes: any RoutesBuilder) throws {
         let discord = routes.grouped("discord")
-        let protected = discord.grouped(User.asyncSessionAuthenticator()).grouped(User.guardMiddleware())
+        let protected = discord.grouped(User.guardMiddleware())
         
         // Discord OAuth 시작
         protected.get("authorize") { req async throws -> Response in

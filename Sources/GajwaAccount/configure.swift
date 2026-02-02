@@ -31,6 +31,7 @@ public func configure(_ app: Application) async throws {
         tls: .prefer(try .init(configuration: .clientDefault)))
     ), as: .psql)
     
+    app.sessions.configuration.cookieName = "gajwaaccount-session"
     app.middleware.use(app.sessions.middleware)
     app.middleware.use(User.asyncSessionAuthenticator())
     
