@@ -269,15 +269,6 @@ function displayAppDetails(app) {
             <div>${redirectUrisHtml}</div>
         </div>
 
-        <div class="appDetailsSection">
-            <h4 class="heading xsmall appDetailsLabel">권한</h4>
-            <div class="appDetailsScopes">
-                ${app.scopes.map(scope => 
-                    `<span class="appDetailsScopeBadge">${escapeHtml(scope)}</span>`
-                ).join('')}
-            </div>
-        </div>
-
         <div class="appDetailsActions">
             <button type="button" class="secondaryButton appDetailsActionButton" onclick="regenerateClientSecret('${app.id}')">Secret 재생성</button>
         </div>
