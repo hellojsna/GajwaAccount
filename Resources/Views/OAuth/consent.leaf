@@ -20,38 +20,44 @@
                             <img src="#(appLogoURL)" alt="#(appName)">
                         </div>
                     #endif
-                    <div class="app-name">#(appName)</div>
-                    <div class="app-description">#(appDescription)</div>
+                    <div class="heading large">#(appName)</div>
+                    <div class="body small">#(appDescription)</div>
                 </div>
 
                 <div class="consent-message">
-                    <strong>#(userName)</strong>님이 사용 중인 Gajwa Account로 로그인하면, <strong>#(appName)</strong>이(가) 다음 정보에 접근할 수 있습니다.
+                    <p class="body medium"><span class="body medium bold">#(userName)</span>님이 사용 중인 Gajwa Account로 로그인하면,<br><span class="body medium bold">#(appName)</span>이(가) 다음 정보에 접근할 수 있습니다.</p>
                 </div>
 
                 <div class="user-info">
-                    <span class="label">로그인 ID:</span>
-                    <span class="value">#(userLoginID)</span>
+                    <span class="body small">로그인 ID:</span>
+                    <span class="body small bold">#(userLoginID)</span>
                 </div>
 
                 <div class="scope-section">
-                    <div class="scope-title">요청 권한</div>
+                    <div class="heading small">요청 권한</div>
                     <div class="scope-map">
                         #for(scope in scopes):
                             <div class="scope-item-wrapper">
                                 <input type="checkbox" class="scope-checkbox" checked disabled>
                                 <div class="scope-item-content">
                                     #if(scope == "profile"):
-                                        <div class="scope-item-title">프로필 정보</div>
-                                        <div class="scope-item-desc">이름, 학번 등의 기본 정보</div>
+                                        <div class="body medium bold">프로필 정보</div>
+                                        <div class="body xsmall">로그인 ID, 이름 등의 기본 정보</div>
                                     #elseif(scope == "email"):
-                                        <div class="scope-item-title">이메일</div>
-                                        <div class="scope-item-desc">가입할 때 등록한 이메일 주소</div>
+                                        <div class="body medium bold">이메일</div>
+                                        <div class="body xsmall">등록된 이메일 주소</div>
                                     #elseif(scope == "phone"):
-                                        <div class="scope-item-title">전화번호</div>
-                                        <div class="scope-item-desc">등록된 전화번호 정보</div>
+                                        <div class="body medium bold">전화번호</div>
+                                        <div class="body xsmall">등록된 전화번호 정보</div>
+                                    #elseif(scope == "student_id"):
+                                        <div class="body medium bold">학번</div>
+                                        <div class="body xsmall">등록된 학번 목록</div>
+                                    #elseif(scope == "developer"):
+                                        <div class="body medium bold">개발자 정보</div>
+                                        <div class="body xsmall">개발자 인증 정보</div>
                                     #else:
-                                        <div class="scope-item-title">#(scope)</div>
-                                        <div class="scope-item-desc">추가 권한</div>
+                                        <div class="body medium bold">#(scope)</div>
+                                        <div class="body xsmall">추가 권한</div>
                                     #endif
                                 </div>
                             </div>
@@ -69,8 +75,8 @@
                 </div>
 
                 <div class="consent-footer">
-                    <p>이 앱은 귀하가 승인한 권한 내에서만 정보에 접근할 수 있습니다.<br>
-                    승인을 철회하려면 <a href="/home">계정 설정</a>에서 관리할 수 있습니다.</p>
+                    <p class="body xsmall">이 앱은 귀하가 승인한 권한 내에서만 정보에 접근할 수 있습니다.<br>
+                    승인을 철회하려면 <a class="body xsmall" href="/home">계정 설정</a>에서 관리할 수 있습니다.</p>
                 </div>
             </div>
         </main>

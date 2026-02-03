@@ -49,28 +49,12 @@
     object-fit: cover;
 }
 
-.app-name {
-    font-size: var(--font-size-heading-medium);
-    font-weight: 700;
-    color: var(--primaryText);
-    margin-bottom: 0.8rem;
-}
-
-.app-description {
-    font-size: var(--font-size-text-xsmall);
-    color: var(--secondaryText);
-    margin-bottom: 2rem;
-}
-
 /* Consent Message */
 .consent-message {
     padding: 1.6rem;
     background: var(--tertiaryGroupedBackground);
     border-radius: 1rem;
     margin-bottom: 2.4rem;
-    font-size: var(--font-size-text-xsmall);
-    line-height: 1.6;
-    color: var(--primaryText);
 }
 
 /* User Info Section */
@@ -84,30 +68,13 @@
     border-radius: 1rem;
 }
 
-.user-info .label {
-    font-size: var(--font-size-text-xsmall);
-    color: var(--secondaryText);
-    font-weight: 600;
-}
-
-.user-info .value {
-    font-size: var(--font-size-text-xsmall);
-    color: var(--primaryText);
-    font-weight: 700;
-}
-
 /* Scope Section */
 .scope-section {
     margin-bottom: 2.4rem;
 }
 
-.scope-title {
-    font-size: var(--font-size-text-xsmall);
-    font-weight: 700;
-    color: var(--primaryText);
-    margin-bottom: 1.2rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+.scope-section > .heading {
+    margin-bottom: 1rem;
 }
 
 .scope-map {
@@ -129,26 +96,13 @@
 .scope-checkbox {
     width: 2rem;
     height: 2rem;
-    margin-top: 0.2rem;
+    margin-top: 1rem;
     cursor: pointer;
     accent-color: var(--blue);
 }
 
 .scope-item-content {
     flex: 1;
-}
-
-.scope-item-title {
-    font-size: var(--font-size-text-xsmall);
-    font-weight: 700;
-    color: var(--primaryText);
-}
-
-.scope-item-desc {
-    font-size: var(--font-size-text-xsmall);
-    color: var(--secondaryText);
-    margin-top: 0.2rem;
-    line-height: 1.5;
 }
 
 /* Action Buttons */
@@ -172,13 +126,6 @@
     padding-top: 2rem;
     border-top: 1px solid var(--quaternaryGroupedBackground);
     text-align: center;
-}
-
-.consent-footer p {
-    font-size: 1.2rem;
-    color: var(--tertiaryText);
-    line-height: 1.6;
-    margin: 0;
 }
 
 .consent-footer a {
@@ -205,9 +152,5 @@
         width: 5rem;
         height: 5rem;
         margin-bottom: 1rem;
-    }
-
-    .app-name {
-        font-size: var(--font-size-heading-small);
     }
 }
