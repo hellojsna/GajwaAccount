@@ -425,13 +425,14 @@ struct OAuthAPIController: RouteCollection {
                     req.session.data["oauth_code_challenge_method"] = challengeMethod
                 }
 
-                // Internal developer API: always grant all scopes
-                let allScopes = ["profile", "email", "phone", "student_id", "developer"]
+                // let allScopes = ["profile", "email", "phone", "student_id", "developer"]
+                // Internal developer API: accept any requested scopes without validation
+                let requestedScopes = (query.scope ?? "profile student_id").split(separator: " ").map(String.init)
 
                 // Store authorization request in session for consent screen
                 req.session.data["oauth_client_id"] = query.clientID
                 req.session.data["oauth_redirect_uri"] = query.redirectURI
-                req.session.data["oauth_scope"] = allScopes.joined(separator: " ")
+                req.session.data["oauth_scope"] = requestedScopes.joined(separator: " ")
                 req.session.data["oauth_state"] = query.state
 
                 struct ConsentContext: Content {
@@ -449,7 +450,7 @@ struct OAuthAPIController: RouteCollection {
                     appLogoURL: client.logoURL,
                     userName: user.userName,
                     userLoginID: user.userLoginID,
-                    scopes: allScopes
+                    scopes: requestedScopes
                 )
 
                 return try await req.view.render("OAuth/consent", context).encodeResponse(for: req)
