@@ -172,8 +172,25 @@ window.deleteStudentId = async function(studentIdFull) {
 // Password Change Form
 const passwordChangeForm = document.getElementById("passwordChangeForm");
 if (passwordChangeForm) {
+    const authMethodSelect = document.getElementById("passwordAuthMethod");
+    const currentPasswordInput = document.getElementById("currentPassword");
+
+    function syncPasswordAuthUI() {
+        if (!authMethodSelect || !currentPasswordInput) return;
+        const usePasskey = authMethodSelect.value === "passkey";
+        currentPasswordInput.disabled = usePasskey;
+        currentPasswordInput.required = !usePasskey;
+        if (usePasskey) currentPasswordInput.value = "";
+    }
+
+    if (authMethodSelect) {
+        authMethodSelect.addEventListener("change", syncPasswordAuthUI);
+        syncPasswordAuthUI();
+    }
+
     passwordChangeForm.addEventListener("submit", async (e) => {
         e.preventDefault();
+        const authMethod = authMethodSelect ? authMethodSelect.value : "password";
         const currentPassword = document.getElementById("currentPassword").value;
         const newPassword = document.getElementById("newPassword").value;
         const confirmPassword = document.getElementById("confirmPassword").value;
@@ -189,10 +206,40 @@ if (passwordChangeForm) {
         }
 
         try {
+            let body;
+
+            if (authMethod === "passkey") {
+                if (!window.PublicKeyCredential || !PublicKeyCredential.parseRequestOptionsFromJSON) {
+                    alert("이 브라우저에서는 패스키를 지원하지 않습니다.");
+                    return;
+                }
+
+                const beginResponse = await fetch("/api/v1/user/password/passkey");
+                if (!beginResponse.ok) {
+                    throw new Error("Failed to start passkey verification for password change");
+                }
+
+                const options = await beginResponse.json();
+                const publicKey = PublicKeyCredential.parseRequestOptionsFromJSON(options.publicKey);
+                const credential = await navigator.credentials.get({ publicKey });
+
+                body = JSON.stringify({
+                    authMethod: "passkey",
+                    passkeyAssertion: credential.toJSON(),
+                    newPassword
+                });
+            } else {
+                body = JSON.stringify({
+                    authMethod: "password",
+                    currentPassword,
+                    newPassword
+                });
+            }
+
             const response = await fetch("/api/v1/user/password", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ currentPassword, newPassword })
+                body
             });
 
             if (response.ok) {

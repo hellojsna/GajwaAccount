@@ -238,19 +238,52 @@ struct UserAPIController: RouteCollection {
 
                     protected.patch("password") { req async throws -> HTTPStatus in
                         struct ChangePasswordRequest: Content {
-                            let currentPassword: String
+                            let authMethod: String?
+                            let currentPassword: String?
+                            let passkeyAssertion: AuthenticationCredential?
                             let newPassword: String
                         }
                         
                         let user = try req.auth.require(User.self)
+                        let userID = try user.requireID()
                         let request = try req.content.decode(ChangePasswordRequest.self)
+                        let authMethod = request.authMethod ?? "password"
                         
-                        // 현재 비밀번호 검증
-                        let verifiedHashed = (try? Bcrypt.verify(request.currentPassword, created: user.userLoginPassword)) == true
-                        let verifiedPlain = user.userLoginPassword == request.currentPassword
-                        
-                        guard verifiedHashed || verifiedPlain else {
-                            throw Abort(.unauthorized, reason: "Current password is incorrect")
+                        if authMethod == "passkey" {
+                            guard let challengeEncoded = req.session.data["passwordChangeChallenge"],
+                                  let challenge = Data(base64Encoded: challengeEncoded) else {
+                                throw Abort(.badRequest, reason: "Missing password change challenge")
+                            }
+                            guard let assertion = request.passkeyAssertion else {
+                                throw Abort(.badRequest, reason: "Missing passkey assertion")
+                            }
+
+                            guard let credential = try await Passkey.query(on: req.db)
+                                .filter(\.$id == assertion.id.urlDecoded.asString())
+                                .filter(\.$user.$id == userID)
+                                .first() else {
+                                throw Abort(.unauthorized, reason: "Passkey not found")
+                            }
+
+                            _ = try req.webAuthn.finishAuthentication(
+                                credential: assertion,
+                                expectedChallenge: [UInt8](challenge),
+                                credentialPublicKey: [UInt8](URLEncodedBase64(credential.publicKey).urlDecoded.decoded!),
+                                credentialCurrentSignCount: UInt32(credential.currentSignCount)
+                            )
+
+                            req.session.data["passwordChangeChallenge"] = nil
+                        } else {
+                            guard let currentPassword = request.currentPassword else {
+                                throw Abort(.badRequest, reason: "Current password is required")
+                            }
+
+                            let verifiedHashed = (try? Bcrypt.verify(currentPassword, created: user.userLoginPassword)) == true
+                            let verifiedPlain = user.userLoginPassword == currentPassword
+
+                            guard verifiedHashed || verifiedPlain else {
+                                throw Abort(.unauthorized, reason: "Current password is incorrect")
+                            }
                         }
                         
                         // 새 비밀번호 해시화
@@ -258,6 +291,24 @@ struct UserAPIController: RouteCollection {
                         try await user.save(on: req.db)
                         
                         return HTTPStatus.ok
+                    }
+
+                    protected.get("password", "passkey") { req async throws -> RequestCredentialOptions in
+                        let user = try req.auth.require(User.self)
+                        let userID = try user.requireID()
+                        let userPasskeys = try await Passkey.query(on: req.db)
+                            .filter(\.$user.$id == userID)
+                            .all()
+
+                        guard !userPasskeys.isEmpty else {
+                            throw Abort(.badRequest, reason: "No passkeys registered")
+                        }
+
+                        let options = try req.webAuthn.beginAuthentication()
+
+                        req.session.data["passwordChangeChallenge"] = Data(options.challenge).base64EncodedString()
+
+                        return RequestCredentialOptions(publicKey: options)
                     }
                     
                     protected.post("deactivate") { req async throws -> HTTPStatus in

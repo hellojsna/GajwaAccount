@@ -241,6 +241,13 @@
                     <h3 class="heading small">비밀번호 변경</h3>
                     <form id="passwordChangeForm" class="form">
                         <div class="inputGroup">
+                            <label class="heading xsmall">인증 방식</label>
+                            <select id="passwordAuthMethod">
+                                <option value="password" selected>기존 비밀번호 입력</option>
+                                <option value="passkey">Passkey 인증</option>
+                            </select>
+                        </div>
+                        <div class="inputGroup">
                             <label class="heading xsmall">현재 비밀번호</label>
                             <input type="password" id="currentPassword" placeholder="현재 비밀번호">
                         </div>

@@ -42,6 +42,9 @@ final class OAuthClient: Model, @unchecked Sendable {
     @Parent(key: "developer_id")
     var developer: User
 
+    @Field(key: "scopes")
+    var scopes: [String]
+
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
 
@@ -60,7 +63,8 @@ final class OAuthClient: Model, @unchecked Sendable {
         homepageURL: String? = nil,
         logoURL: String? = nil,
         isConfidential: Bool = true,
-        developerID: UUID
+        developerID: UUID,
+        scopes: [String] = ["profile", "email"]
     ) {
         self.id = id
         self.clientID = clientID
@@ -72,6 +76,7 @@ final class OAuthClient: Model, @unchecked Sendable {
         self.logoURL = logoURL
         self.isConfidential = isConfidential
         self.$developer.id = developerID
+        self.scopes = scopes
     }
 }
 
@@ -84,6 +89,7 @@ struct OAuthClientResponse: Content {
     let redirectURIs: [String]
     let homepageURL: String?
     let logoURL: String?
+    let scopes: [String]
     let createdAt: Date?
     let updatedAt: Date?
 
@@ -95,6 +101,7 @@ struct OAuthClientResponse: Content {
         self.redirectURIs = client.redirectURIs
         self.homepageURL = client.homepageURL
         self.logoURL = client.logoURL
+        self.scopes = client.scopes
         self.createdAt = client.createdAt
         self.updatedAt = client.updatedAt
     }
@@ -110,6 +117,7 @@ struct OAuthClientDetailResponse: Content {
     let homepageURL: String?
     let logoURL: String?
     let isConfidential: Bool
+    let scopes: [String]
     let createdAt: Date?
     let updatedAt: Date?
 
@@ -123,6 +131,7 @@ struct OAuthClientDetailResponse: Content {
         self.homepageURL = client.homepageURL
         self.logoURL = client.logoURL
         self.isConfidential = client.isConfidential
+        self.scopes = client.scopes
         self.createdAt = client.createdAt
         self.updatedAt = client.updatedAt
     }
